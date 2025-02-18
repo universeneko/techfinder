@@ -28,7 +28,7 @@ DEBUG = False
 
 # settings.py
 ALLOWED_HOSTS = ['zippy-beauty.up.railway.app', 'techfinder-production.up.railway.app', 'localhost', '127.0.0.1']  # Reemplaza X con tu IP local
-CSRF_TRUSTED_ORIGINS = ['techfinder-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://techfinder-production.up.railway.app']
 
 # Application definition
 
