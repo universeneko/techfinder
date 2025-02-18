@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-$_78tgwom3=dg25hn7wr!n3ojoh7$%k@y$)$2&js!g!wm_y%do
 DEBUG = True
 
 # settings.py
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.110']  # Reemplaza X con tu IP local
+ALLOWED_HOSTS = ['zippy-beauty.up.railway.app']  # Reemplaza X con tu IP local
 
 
 # Application definition
