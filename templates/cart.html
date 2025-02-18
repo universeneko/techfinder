@@ -1,0 +1,25 @@
+{% extends 'shop.html' %}
+{% load static %}
+
+{% block content %}
+<div class="cart-container">
+    <h2>Mi Carrito</h2>
+
+    {% if dispositivos %}
+        <div class="cart-items">
+            {% for dispositivo in dispositivos %}
+                <div class="cart-item">
+                    <img src="{{ dispositivo.imagen_url }}" alt="{{ dispositivo.nombre }}">
+                    <div class="item-details">
+                        <h3>{{ dispositivo.nombre }}</h3>
+                        <p>{{ dispositivo.marca }}</p>
+                        <p>Precio: ${{ dispositivo.precio }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Tu carrito está vacío</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página no encontrada</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        h1 {
+            color: #ff5252;
+        }
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>404 - Página no encontrada</h1>
+    <p>Revisa bien la dirección o comprueba que tengas los permisos para ver este contenido.</p>
+    <a href="/">Volver al inicio</a>
+    <a href="{% url 'shop' %}" class="btn btn-primary" style="position: fixed; top: 10px; left: 10px;">
+    ⬅ Volver a la Tienda
+    </a>
+</body>
+</html>

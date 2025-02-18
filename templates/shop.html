@@ -1,0 +1,250 @@
+{% load static %} <!-- Cargar la función para archivos estáticos -->
+<!DOCTYPE html>
+<html lang="es">
+<meta name="viewport" content="width=device-width, initial-scale=1.25">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TechFinder - Tienda</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="{% static 'css/shop.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+</head>
+
+<body>
+    <!-- 🔳 Barra Superior -->
+<header class="top-bar">
+    <div class="top-container">
+        <div class="left-section">
+            <!-- Removemos el botón duplicado de usuario de la izquierda -->
+        </div>
+
+        <div class="logo-section">
+            <h1 class="tech-title">TechFinder</h1>
+        </div>
+
+        <!-- Navigation section in header -->
+        <div class="right-section">
+            <div class="buttons-container">
+                <!-- Cart button -->
+                <a href="/cart" class="nav-button">
+                    <i class="bi bi-cart3"></i>
+                    <span class="cart-badge">0</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% if request.session.usuario_id %}
+    <div class="user-profile">
+        <button class="user-profile-btn" onclick="toggleUserMenu()">
+            <i class="fas fa-user"></i>
+            <span class="username-frame">{{ request.session.usuario_email }}</span>
+        </button>
+
+        <!-- User Menu Dropdown -->
+        <div class="user-dropdown-menu" id="userMenu">
+            <div class="menu-options">
+                <a href="#" class="menu-item" onclick="showChangeEmailForm()">
+                    <i class="fas fa-envelope"></i>
+                    Cambiar Email
+                </a>
+                <a href="{% url 'logout' %}" class="menu-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Cerrar Sesión
+                </a>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="guest-section">
+        <a href="{% url 'login' %}" class="nav-button">
+            <i class="bi bi-person"></i>
+        </a>
+        <span class="guest-badge">
+            <i class="fas fa-user-clock"></i>
+            Navegando como invitado
+        </span>
+    </div>
+{% endif %}
+
+</header>
+
+
+    <!-- 🛒 Contenido Principal -->
+    <main class="main-container">
+
+        <!-- 🎛 Barra lateral de filtros -->
+        <aside class="sidebar">
+            <h2>Filtrar Productos</h2>
+
+            <form method="get">
+                <!-- Tipo de dispositivo -->
+                <div class="filter-section">
+                    <label for="tipo">Tipo de Dispositivo:</label>
+                    <select id="tipo" name="tipo">
+                        <option value="">Todos</option>
+                        <option value="Móvil" {% if request.GET.tipo == 'Móvil' %}selected{% endif %}>Móvil</option>
+                        <option value="Portátil" {% if request.GET.tipo == 'Portátil' %}selected{% endif %}>Portátil
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Filtro de precio -->
+                <div class="filter-section">
+                    <label for="precio-min">Filtrar por precio:</label>
+                    <input type="number" id="precio-min" name="precio_min" placeholder="Min $"
+                        value="{{ request.GET.precio_min|default:'' }}" step="0.01"> <!-- Permite decimales -->
+                    <label for="precio-max"></label><input type="number" id="precio-max" name="precio_max"
+                        placeholder="Max $" value="{{ request.GET.precio_max|default:'' }}" step="0.01">
+                    <!-- Permite decimales -->
+                    {% if request.GET.precio_min or request.GET.precio_max %}
+                    <div class="filter-active">
+                        Mostrando productos:
+                        {% if request.GET.precio_min %}desde ${{ request.GET.precio_min }}{% endif %}
+                        {% if request.GET.precio_min and request.GET.precio_max %} hasta {% endif %}
+                        {% if request.GET.precio_max %}${{ request.GET.precio_max }}{% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if filtros_aplicados and total_dispositivos == 0 %}
+                <div class="no-results-message">
+                    <div class="no-results-content">
+                        <i class="fas fa-search-minus"></i>
+                        <p>No se encontraron dispositivos que coincidan con los filtros seleccionados</p>
+                        <a href="{% url 'shop' %}" class="reset-filters-btn">
+                            <i class="fas fa-undo"></i> Restablecer filtros
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+
+
+                <!-- Marcas -->
+                <div class="filter-section">
+                    <label for="marca">Marcas Disponibles:</label>
+                    <select id="marca" name="marca">
+                        <option value="">Todas</option>
+                        <option value="Samsung" {% if request.GET.marca == 'Samsung' %}selected{% endif %}>Samsung
+                        </option>
+                        <option value="Apple" {% if request.GET.marca == 'Apple' %}selected{% endif %}>Apple</option>
+                        <option value="Lenovo" {% if request.GET.marca == 'Lenovo' %}selected{% endif %}>Lenovo</option>
+                    </select>
+                </div>
+
+                <!-- Ordenamiento -->
+                <div class="filter-section">
+                    <label for="sort_by">Ordenar por:</label>
+                    <select id="sort_by" name="sort_by">
+                        <option value="">Sin ordenar</option>
+                        <option value="price_asc" {% if request.GET.sort_by == 'price_asc' %}selected{% endif %}>Precio:
+                            Menor a Mayor</option>
+                        <option value="price_desc" {% if request.GET.sort_by == 'price_desc' %}selected{% endif %}>Precio:
+                            Mayor a Menor</option>
+                        <option value="rating_desc" {% if request.GET.sort_by == 'rating_desc' %} selected {% endif %}> Mejor Valorados</option>
+                    </select>
+                </div>
+                <div class="filter-section stock-filter">
+                    <div class="switch-container">
+                        <label class="switch">
+                            <input type="checkbox" name="con_stock" {% if request.GET.con_stock %}checked{% endif %}>
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="switch-label">Solo mostrar productos disponibles</span>
+                    </div>
+                </div>
+
+
+                <button type="submit" class="primary">Aplicar Filtros</button>
+            </form>
+        </aside>
+
+
+        <!-- 📦 Sección de Productos -->
+        <section class="shop-content">
+            <h1>Lista de Productos</h1>
+
+            <!-- 🔲 Grid de Productos -->
+            <div class="product-grid">
+                {% for dispositivo in dispositivos %}
+                <div class="card {% if dispositivo.stock == 0 %}out-of-stock-card{% endif %}">
+                    <div class="stock-badge
+        {% if dispositivo.stock == 0 %}out-of-stock
+        {% elif dispositivo.stock <= 5 %}low-stock
+        {% endif %}" data-stock="{{ dispositivo.stock }}">
+                        {% if dispositivo.stock == 0 %}
+                        <i class="fas fa-times-circle"></i> Sin stock
+                        {% elif dispositivo.stock == 1 %}
+                        <i class="fas fa-exclamation-circle"></i> ¡Última unidad!
+                        {% elif dispositivo.stock <= 5 %} <i class="fas fa-exclamation-circle"></i> ¡Últimas
+                            {{ dispositivo.stock }} unidades!
+                            {% else %}
+                            <i class="fas fa-box-open"></i> Stock: {{ dispositivo.stock }} unidades
+                            {% endif %}
+                    </div>
+
+
+                    <!-- Imagen del producto desde la URL o un placeholder si no hay imagen disponible -->
+                    <div class="product-image">
+                        <img src="{{ dispositivo.imagen_url|default:'/static/img/placeholder.jpg' }}"
+                            alt="{{ dispositivo.nombre }}">
+                    </div>
+
+                    <!-- Información del producto -->
+                    <h3>{{ dispositivo.nombre }}</h3> <!-- Fondo redondeado agregado -->
+
+                    <div class="price">Precio: ${{ dispositivo.precio }}</div> <!-- Precio con color azul y negrita -->
+
+                    <p>Marca: {{ dispositivo.marca }}</p>
+                    <p>Tipo: {{ dispositivo.tipo }}</p>
+                    <p>Lanzado en: {{ dispositivo.fecha_lanzamiento }}</p>
+
+                    <!-- Botones debajo del contenido -->
+                    <div class="product-buttons">
+                        <button class="btn-action btn-add-cart {% if dispositivo.stock == 0 %}btn-disabled{% endif %}"
+                            {% if dispositivo.stock == 0 %}disabled{% endif %}>
+
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="btn-text">{% if dispositivo.stock == 0 %}Agotado{% else %}
+                                <a href="{% url 'add_to_cart' dispositivo.id %}" class="add-to-cart-btn"> Añadir al carrito </a>
+                                {% endif %}</span>
+                        </button>
+
+                        <button class="btn-action btn-reviews">
+                            <i class="fas fa-star"></i>
+                            Reseñas
+                        </button>
+                    </div>
+
+                    <div class="rating">
+                        {% with ''|center:5 as range %}
+                        {% for _ in range %}
+                        {% if forloop.counter <= dispositivo.rating %} <span class="star filled">★</span>
+                            {% else %}
+                            <span class="star">☆</span>
+                            {% endif %}
+                            {% endfor %}
+                            {% endwith %}
+                            <span class="rating-value">({{ dispositivo.rating }})</span>
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <!-- 📜 Script para carga infinita -->
+    <script src="{% static 'js/stockFilter.js' %}"></script>
+    <script src="{% static 'js/toastNotifications.js' %}"></script>
+    <script src="{% static 'js/userMenu.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Productos</title>
+</head>
+<body>
+    <h1>Añadir Producto</h1>
+    <form>
+        <input type="text" placeholder="Nombre del producto">
+        <textarea placeholder="Descripción"></textarea>
+        <input type="file">
+        <button type="submit">Agregar</button>
+    </form>
+    <a href="{% url 'shop' %}" class="btn btn-primary" style="position: fixed; top: 10px; left: 10px;">
+    ⬅ Volver a la Tienda
+    </a>
+</body>
+</html>
