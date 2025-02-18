@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$_78tgwom3=dg25hn7wr!n3ojoh7$%k@y$)$2&js!g!wm_y%do'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # settings.py
 ALLOWED_HOSTS = ['zippy-beauty.up.railway.app']  # Reemplaza X con tu IP local
