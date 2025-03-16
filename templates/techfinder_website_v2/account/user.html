@@ -1,0 +1,115 @@
+{% extends 'techfinder_website_v2/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="user-profile-container">
+        <h2 class="profile-title">Actualizar mi Perfil</h2>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="profile-card">
+            <form method="POST" action="{% url 'update_user' %}" class="user-form">
+                {% csrf_token %}
+
+                <!-- Nombre y Apellidos en la misma fila -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" value="{{ user.nombre }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellidos">Apellidos</label>
+                        <input type="text" class="form-control" id="apellidos" name="apellidos" value="{{ user.apellidos }}" required>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                </div>
+
+                <!-- Sección de contraseñas -->
+                <div class="password-section">
+                    <div class="current-password">
+                        <div class="form-group">
+                            <label for="current_password">Contraseña actual</label>
+                            <input type="password" class="form-control" id="current_password" name="current_password">
+                        </div>
+                    </div>
+
+                    <div class="new-passwords">
+                        <div class="form-group">
+                            <label for="new_password">Nueva contraseña</label>
+                            <input type="password" class="form-control" id="new_password" name="new_password">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_password">Repetir contraseña</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-danger" id="deleteAccountBtn">
+                        <i class="fas fa-user-minus"></i> Eliminar cuenta
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Manejar el formulario de actualización
+            const userForm = document.querySelector('.user-form');
+            userForm.addEventListener('submit', function(e) {
+                const newPassword = document.getElementById('new_password').value;
+                const confirmPassword = document.getElementById('confirm_password').value;
+
+                if (newPassword && newPassword !== confirmPassword) {
+                    e.preventDefault();
+                    alert('Las contraseñas no coinciden');
+                }
+            });
+
+            // Manejar eliminación de cuenta
+            const deleteBtn = document.getElementById('deleteAccountBtn');
+            deleteBtn.addEventListener('click', function() {
+                if (confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.')) {
+                    fetch('{% url "delete_account" %}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                window.location.href = '{% url "home" %}';
+                            } else {
+                                alert(data.error || 'Error al eliminar la cuenta');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error al procesar la solicitud');
+                        });
+                }
+            });
+        });
+    </script>
+{% endblock %}

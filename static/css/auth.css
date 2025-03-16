@@ -1,0 +1,121 @@
+.form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-header h2 {
+    color: var(--text-primary);
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+
+.auth-form-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--fancy-purple);
+    box-shadow: 0 0 0 2px rgba(102, 18, 172, 0.2);
+}
+
+.btn-auth {
+    background: linear-gradient(135deg, var(--fancy-purple), var(--light-purple));
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-auth:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 18, 172, 0.3);
+}
+
+.form-switch {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-top: 1rem;
+}
+
+.form-switch a {
+    color: var(--fancy-purple);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.form-switch a:hover {
+    color: var(--light-purple);
+}
+
+@media (max-width: 576px) {
+    .auth-modal {
+        margin: 1rem;
+    }
+
+    .auth-form {
+        padding: 1.5rem;
+    }
+}
+
+/* Asegurarse de que las alertas estén por encima del blur */
+.container.mt-3 {
+    position: relative;
+    z-index: 1100; /* Mayor que el z-index del backdrop */
+}
+
+/* Animaciones */
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+}
+
+/* Ajustar el z-index del backdrop si no está ya definido */
+.auth-backdrop {
+    z-index: 1000;
+}
+
+.auth-modal {
+    z-index: 1050;
+}

@@ -1,0 +1,194 @@
+{% extends 'techfinder_website_v2/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+
+<!-- Barra de Añadir Dispositivo -->
+<div class="add-device-section">
+    <div class="section-header">
+        <h2>Añadir nuevo dispositivo</h2>
+        <button type="button" id="toggleAddForm" class="toggle-btn">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+    </div>
+
+    <form id="addDeviceForm" class="add-device-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-container">
+            <!-- Sección 1: Imagen (Izquierda) -->
+            <div class="image-section">
+                <div class="form-group file-input-wrapper">
+                    <button type="button" class="btn btn-outline-secondary file-selector-button">
+                        <i class="fas fa-upload"></i> Añadir imagen
+                    </button>
+                    <input type="file" id="imagen" name="imagen" accept="image/*" required class="hidden-file-input">
+                    <span class="file-name">Ningún archivo seleccionado</span>
+                    <div class="image-preview" id="imagePreview">
+                        <img src="" alt="Vista previa" style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Separador vertical -->
+            <div class="vertical-divider"></div>
+
+            <!-- Sección 2: Información del producto (Centro) -->
+            <div class="info-section">
+                <div class="form-group">
+                    <label for="nombre">Nombre del dispositivo</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <input type="number" id="precio" name="precio" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="sistema">Sistema Operativo</label>
+                    <select id="sistema" name="sistema" required>
+                        <option value="">Seleccionar SO</option>
+                        <option value="Android">Android</option>
+                        <option value="iOS">iOS</option>
+                        <option value="Windows">Windows</option>
+                        <option value="macOS">Linux</option>
+                        <option value="macOS">macOS</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tipo">Tipo</label>
+                    <select id="tipo" name="tipo" required>
+                        <option value="">Seleccionar tipo</option>
+                        <option value="Smartphone">Smartphone</option>
+                        <option value="Tablet">Tablet</option>
+                        <option value="Laptop">Laptop</option>
+                        <option value="Smartwatch">Smartwatch</option>
+                        <option value="Computador Torre">Computador Torre</option>
+                        <option value="Teclados">Teclados</option>
+                        <option value="Mouses">Mouses</option>
+                        <option value="Audifonos">Audífonos</option>
+                        <option value="Audifonos Inalámbricos">Audífonos inalámbricos</option>
+                        <option value="Cámaras">Cámaras</option>
+                        <option value="Controles de Videojuegos">Controles de Videojuegos</option>
+                        <option value="Consolas de Videojuegos">Consolas de Videojuegos</option>
+                        <option value="Drones">Drones</option>
+                        <option value="Fundas para móvil">Fundas para móvil</option>
+                        <option value="Accesorios para PC">Accesorios para PC</option>
+                        <option value="Monitores">Monitores</option>
+                        <option value="Impresoras">Impresoras</option>
+                        <option value="Componentes de PC">Componentes de PC</option>
+                        <option value="Cables y Adaptadores">Cables y Adaptadores</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="stock">Stock</label>
+                    <input type="number" id="stock" name="stock" required min="0">
+                </div>
+            </div>
+
+            <!-- Separador vertical -->
+            <div class="vertical-divider"></div>
+
+            <!-- Sección 3: Descripción y botón (Derecha) -->
+            <div class="description-section">
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <textarea id="descripcion" name="descripcion" required rows="6"></textarea>
+                </div>
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-plus"></i> Añadir Dispositivo
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+    <!-- Tabla de Dispositivos -->
+    <div class="devices-table-section">
+        <h2>Dispositivos Disponibles</h2>
+        <div class="table-responsive">
+            <table class="devices-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Tipo</th>
+                        <th>Sistema</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in productos %}
+                    <tr id="producto-{{ producto.id }}" data-producto-id="{{ producto.id }}">
+                    <td>{{ producto.id }}</td>
+
+                        <td class="product-image">
+                            {% if producto.imagen %}
+                                <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                            {% else %}
+                                <img src="{% static 'img/unknown.png' %}" alt="Sin imagen">
+                            {% endif %}
+                        </td>
+
+                        <td class="editable" data-field="nombre">{{ producto.nombre }}</td>
+                        <td class="editable" data-field="descripcion">{{ producto.descripcion }}</td>
+                        <td class="editable" data-field="precio">{{ producto.precio }}</td>
+                        <td class="editable" data-field="stock">{{ producto.stock }}</td>
+                        <td class="editable" data-field="tipo">{{ producto.tipo }}</td>
+                        <td class="editable" data-field="sistema_operativo">{{ producto.sistema_operativo }}</td>
+
+                        <td class="acciones">
+                        <div class="action-buttons">
+    <button class="btn-editar" title="Editar">
+        <i class="fas fa-pencil-alt"></i>
+    </button>
+    <button class="btn-guardar" style="display:none" title="Guardar">
+        <i class="fas fa-check"></i>
+    </button>
+    <button class="btn-eliminar" title="Eliminar">
+        <i class="fas fa-trash"></i>
+    </button>
+</div>
+
+                    </td>
+
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="no-devices">No hay dispositivos disponibles</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmación -->
+<div id="modalConfirmacion" class="modal">
+    <div class="modal-content">
+        <h3>Confirmar Eliminación</h3>
+        <p>¿Estás seguro de que deseas eliminar este producto?</p>
+        <div class="modal-buttons">
+            <button id="confirmarEliminar" class="btn-confirmar">Confirmar</button>
+            <button id="cancelarEliminar" class="btn-cancelar">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/image_preview.js' %}"></script>
+<script src="{% static 'js/admin.js' %}"></script>
+<script src="{% static 'js/manager.js' %}"></script>
+{% endblock %}

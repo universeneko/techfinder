@@ -1,0 +1,552 @@
+.productos-grid {
+    position: relative;
+    z-index: 1; /* Valor bajo para mantenerlo al fondo */
+}
+
+/* Estructura principal */
+.main-container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 1px;
+    padding: 0.5rem;
+    background-color: var(--dark-background);
+}
+
+aside.filtros-sidebar {
+    margin-left: -100px; /* Puedes ajustar este valor según necesites */
+    position: sticky;
+    top: 2rem;
+    padding-left: 2rem; /* Añadimos padding interno para que el contenido no quede pegado al borde */
+}
+
+/* Título principal "Filtros" */
+.toggle-label {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary, #fff);
+    margin-bottom: 1.5rem;
+    display: block;
+    letter-spacing: -0.02em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+}
+
+.toggle-label i {
+    color: var(--fancy-purple, #8a2be2);
+    margin-right: 0.5rem;
+}
+
+/* Secciones de filtros */
+.filtro-seccion {
+    margin-bottom: 2rem;
+}
+
+.filtro-seccion h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary, #fff);
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+}
+
+/* Contenedor de opciones */
+.filtro-opciones {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+/* Estilos para los checkboxes y labels */
+.filtro-opciones label {
+    display: flex;
+    align-items: center;
+    color: var(--text-secondary, #a0a0a0);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
+.filtro-opciones label:hover {
+    background: rgba(var(--fancy-purple), 0.1);
+    color: var(--text-primary, #fff);
+    transform: translateX(5px);
+}
+
+/* Estilización de checkboxes */
+.filtro-opciones input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--fancy-purple, #8a2be2);
+    border-radius: 4px;
+    margin-right: 10px;
+    position: relative;
+    cursor: pointer;
+    background: transparent;
+}
+
+.filtro-opciones input[type="checkbox"]:checked {
+    background: var(--fancy-purple, #8a2be2);
+}
+
+.filtro-opciones input[type="checkbox"]:checked::before {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Estilos para el rango de precios */
+.filtro-precio {
+    padding: 1rem 0;
+}
+
+.precio-slider {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    appearance: none;
+    margin: 1rem 0;
+}
+
+.precio-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--fancy-purple, #8a2be2);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+}
+
+.precio-valores {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-secondary, #a0a0a0);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+/* Campo de entrada de precio */
+.precio-input {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.precio-input input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.5rem;
+    color: var(--text-primary, #fff);
+    font-size: 0.9rem;
+}
+
+.precio-input input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Animaciones y transiciones */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.filtros-contenido {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+    .filtros-sidebar {
+        width: 100%;
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .toggle-input:not(:checked) + .toggle-label + .filtros-contenido {
+        display: none;
+    }
+}
+
+/* Cuadrícula de productos */
+.productos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    width: 100%;
+    align-items: start;
+}
+
+/* Estilos para la tarjeta de producto */
+.producto-card {
+    position: relative;
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;         /* Cambiamos a width 100% */
+    max-width: 280px;    /* Agregamos max-width en su lugar */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin: 0.5rem;      /* Reducimos el margen */
+    border: 1px solid #333;
+    flex: 1;             /* Permitimos que la card sea flexible */
+    min-width: 250px;    /* Establecemos un ancho mínimo */
+    z-index: 1000;
+}
+
+.producto-card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0.5rem 0;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+/* Estilos para la descripción en hover */
+.producto-descripcion {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 53.4%;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 15px;
+    opacity: 0;
+    /* Modificamos la transición para que sea más precisa */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    /* Cambiamos la transformación inicial */
+    transform: translateY(-100%);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    font-size: 0.9em;
+    overflow-y: auto;
+    /* Aseguramos que se mantenga en su capa */
+    will-change: transform, opacity;
+    pointer-events: none; /* Evita problemas de hover */
+}
+
+/* Estilizar la barra de desplazamiento si el texto es muy largo */
+.producto-descripcion::-webkit-scrollbar {
+    width: 6px;
+}
+
+.producto-descripcion::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.producto-descripcion::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
+}
+
+.producto-descripcion p {
+    margin: 0;
+    line-height: 1.4;
+}
+
+.producto-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.producto-card:hover .producto-descripcion {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto; /* Restaura la interacción cuando es visible */
+}
+
+.producto-imagen {
+    width: 300px;
+    height: 300px;
+padding: 1rem;           /* Altura fija para todas las imágenes */
+    object-fit: cover;       /* Mantiene la proporción sin distorsión */
+    border-bottom: 1px solid #333;  /* Separador sutil */
+}
+
+.producto-info {
+    padding: 1.5rem;
+}
+
+.producto-titulo {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.producto-rating {
+    color: #ef00ff;  /* Color dorado para las estrellas */
+    font-size: 0.9rem;
+    margin: 0.25rem 0;
+}
+
+/* Precio del producto */
+.producto-precio {
+    color: #bfbfbf;  /* Verde para el precio */
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0.5rem 0;
+}
+
+/* Estilos para el stock */
+.stock-info {
+    width: 100%;
+    margin-top: 10px;
+    padding: 8px;
+    background: #151515;
+    border: 2px solid #505050;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em;
+}
+
+.stock-label {
+    color: #6c757d;
+}
+
+.stock-cantidad {
+    font-weight: bold;
+    color: #b038f8;
+}
+
+/* Estado de poco stock */
+.stock-cantidad.bajo {
+    color: #dc3545;
+}
+
+/* Carrito lateral */
+.carrito-lateral {
+    position: fixed;
+    right: -400px;
+    top: 0;
+    width: 400px;
+    height: 100vh;
+    background-color: var(--lighter-background);
+    box-shadow: var(--card-shadow);
+    z-index: 1000;
+}
+
+.carrito-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    background-color: var(--dark-background);
+}
+
+.carrito-item {
+    display: flex;
+    padding: 1.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    background-color: var(--dark-background);
+}
+
+.btn-agregar-carrito {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--button-active);
+    color: var(--text-primary);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-agregar-carrito:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-2px);
+}
+
+/* Contenedor principal del sidebar */
+.filtros-sidebar {
+    font-family: 'Space Grotesk', sans-serif;
+    position: sticky;
+    top: 1rem;
+    left: 0;
+    height: 90vh;           /* Cambiado de 100vh a auto */
+    max-height: 87vh;      /* Altura máxima más razonable */
+    width: 300px;          /* Reducido el ancho */
+    flex-shrink: 0;
+    background-color: #1e1e1e;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    padding: 1.9rem;
+    margin-right: 1rem;
+    overflow: hidden;
+}
+
+/* Ocultar el checkbox */
+.toggle-input {
+    display: none;
+}
+
+/* Estilo del botón hamburguesa */
+.toggle-label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background-color: #252525;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid #333;
+    transition: all 0.2s ease;
+}
+
+.toggle-label:hover {
+    background-color: #2a2a2a;
+}
+
+/* Icono del filtro */
+.toggle-label .fas.fa-filter {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+/* Contenedor de los filtros */
+.filtros-contenido {
+    transition: all 0.3s ease-in-out;
+    max-height: calc(85vh - 100px); /* Altura máxima considerando header y márgenes */
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #404040 #1e1e1e;
+}
+
+.filtros-contenido form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Estilo para la barra de desplazamiento */
+.filtros-contenido::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Alineación de los elementos input */
+.filtros-contenido .form-check {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0.25rem 0;
+}
+
+.filtros-contenido::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+
+.filtros-contenido::-webkit-scrollbar-thumb {
+    background-color: #404040;
+    border-radius: 3px;
+}
+
+/* Estado cerrado */
+.toggle-input:not(:checked) ~ .filtros-contenido {
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
+    margin: 0;
+    pointer-events: none;
+}
+
+/* Estado abierto */
+.toggle-input:checked ~ .filtros-contenido {
+    opacity: 1;
+    padding: 1rem 0;
+}
+
+/* Rotación del icono */
+.toggle-input:checked + .toggle-label .fas.fa-filter {
+    transform: rotate(180deg);
+}
+
+/* Estilos específicos para los elementos dentro del filtro */
+.filtros-contenido .filtro-seccion {
+    margin-bottom: 1.5rem;
+    padding: 0.5rem;
+    background-color: #252525;
+    border-radius: 8px;
+}
+
+.filtros-contenido h3 {
+    margin-bottom: 0.75rem;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+    .filtros-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100%;
+        max-width: 320px;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        margin: 0;
+        border-radius: 0;
+        z-index: 1000;
+    }
+
+    .toggle-input:checked ~ .filtros-sidebar {
+        transform: translateX(0);
+    }
+
+    /* Overlay para cuando el sidebar está abierto */
+    .toggle-input:checked ~ .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+}
+
+/* Animaciones suaves */
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

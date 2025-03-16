@@ -1,0 +1,44 @@
+{% load static %}
+
+<div class="profile-menu-container" id="profileMenuContainer">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            <i class="fas fa-user-circle"></i>
+        </div>
+        <div class="profile-info">
+            <h3>{{ user.nombre }} {{ user.apellidos }}</h3>
+            <p>{{ user.email }}</p>
+        </div>
+    </div>
+<div class="profile-menu-items">
+    <a href="/user" class="profile-menu-item">
+        <i class="fas fa-user"></i>
+        <span>Mi Perfil</span>
+    </a>
+
+        <a href="#" class="profile-menu-item">
+            <i class="fas fa-shopping-bag"></i>
+            <span>Mis Compras</span>
+        </a>
+        <a href="#" class="profile-menu-item">
+            <i class="fas fa-cog"></i>
+            <span>Configuración</span>
+        </a>
+
+        {% if user.is_staff or user.permisos == 1 %}
+<a href="/admin/" class="profile-menu-item">
+        <i class="fas fa-shield-alt"></i>
+        <span>Administrar</span>
+    </a>
+
+        {% endif %}
+        <form action="{% url 'logout' %}" method="POST" id="logoutForm">
+            {% csrf_token %}
+            <button type="submit" class="profile-menu-item logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Cerrar Sesión</span>
+            </button>
+        </form>
+    </div>
+</div>
+

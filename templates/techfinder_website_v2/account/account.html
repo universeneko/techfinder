@@ -1,0 +1,62 @@
+{% extends 'techfinder_website_v2/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="auth-container">
+        <div class="auth-backdrop"></div>
+        <div class="auth-modal">
+            <a href="{% url 'store' %}" class="custom-close-modal">
+                <span>Cerrar</span>
+            </a>
+            <div class="auth-forms-container">
+                <div id="login-form" class="auth-form active">
+                    {% include 'techfinder_website_v2/account/auth/login.html' %}
+                </div>
+                <div id="register-form" class="auth-form">
+                    {% include 'techfinder_website_v2/account/auth/register.html' %}
+                </div>
+            </div>
+        </div>
+
+{% if messages %}
+    <div class="messages-overlay">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="custom-close-alert btn-close" data-bs-dismiss="alert">
+                    <span class="close-text"> </span>
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        function toggleForm(formId) {
+            document.querySelectorAll('.auth-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            document.getElementById(formId).classList.add('active');
+        }
+
+        // Autoocultar alertas después de 5 segundos
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.remove();
+                }, 5500); // 5.5 segundos para dar tiempo a la animación
+            });
+        });
+    </script>
+{% endblock %}

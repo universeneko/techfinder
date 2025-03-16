@@ -1,0 +1,87 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/filters.css' %}">
+<aside class="filtros-sidebar">
+    <input type="checkbox" id="toggle-filtros" class="toggle-input">
+    <label for="toggle-filtros" class="toggle-label">
+        <i class="fas fa-bars"></i> <!-- Icono de hamburguesa -->
+        <span>Filtros</span>
+    </label>
+
+    <div class="filtros-contenido">
+        <section class="filtro-seccion">
+            <h3>Categorías</h3>
+            <div class="filtro-opciones">
+                    <label><input type="checkbox" name="tipo" value="Laptop"> Laptops</label>
+                    <label><input type="checkbox" name="tipo" value="Computador Torre"> Computadores Torre</label>
+                    <label><input type="checkbox" name="tipo" value="Smartphone"> Smartphones</label>
+                    <label><input type="checkbox" name="tipo" value="Smartwatch"> Relojes Inteligentes</label>
+                    <label><input type="checkbox" name="tipo" value="Tablet"> Tablets</label>
+                    <label><input type="checkbox" name="tipo" value="Teclados"> Teclados</label>
+                    <label><input type="checkbox" name="tipo" value="Mouses"> Mouses</label>
+                    <label><input type="checkbox" name="tipo" value="Audifonos"> Audífonos</label>
+                    <label><input type="checkbox" name="tipo" value="Audifonos Inalámbricos"> Audífonos inalámbricos</label>
+                    <label><input type="checkbox" name="tipo" value="Cámaras"> Cámaras</label>
+                    <label><input type="checkbox" name="tipo" value="Controles de Videojuegos"> Controles de Videojuegos</label>
+                    <label><input type="checkbox" name="tipo" value="Consolas de Videojuegos"> Consolas de Videojuegos</label>
+                    <label><input type="checkbox" name="tipo" value="Drones"> Drones</label>
+                    <label><input type="checkbox" name="tipo" value="Fundas para móvil"> Fundas para móvil</label>
+                    <label><input type="checkbox" name="tipo" value="Accesorios para PC"> Accesorios para PC</label>
+                    <label><input type="checkbox" name="tipo" value="Monitores"> Monitores</label>
+                    <label><input type="checkbox" name="tipo" value="Impresoras"> Impresoras</label>
+                    <label><input type="checkbox" name="tipo" value="Componentes de PC"> Componentes de PC</label>
+                    <label><input type="checkbox" name="tipo" value="Cables y Adaptadores"> Cables y Adaptadores</label>
+            </div>
+        </section>
+
+        <section class="filtro-seccion">
+            <h3>Sistema Operativo</h3>
+            <div class="filtro-opciones">
+                <label><input type="checkbox" name="sistema_operativo" value="Windows"> Windows</label>
+                <label><input type="checkbox" name="sistema_operativo" value="MacOS"> MacOS</label>
+                <label><input type="checkbox" name="sistema_operativo" value="Linux"> Linux</label>
+                <label><input type="checkbox" name="sistema_operativo" value="Android"> Android</label>
+                <label><input type="checkbox" name="sistema_operativo" value="iOS"> iOS</label>
+                <label><input type="checkbox" name="sistema_operativo" value="Otro"> Otro</label>
+            </div>
+        </section>
+
+        <section class="filtro-seccion">
+            <h3>Rango de Precio</h3>
+            <div class="filtro-precio">
+                <div class="precio-inputs">
+                    <div class="precio-input-grupo">
+                        <label for="precio_min">Mínimo:</label>
+                        <input type="number" id="precio_min" min="0" max="10000" value="0" class="precio-texto">
+                    </div>
+                    <div class="precio-input-grupo">
+                        <label for="precio_max">Máximo:</label>
+                        <input type="number" id="precio_max" min="0" max="10000" value="10000" class="precio-texto">
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <label for="precio_slider_min"></label><input type="range" id="precio_slider_min" min="0" max="10000" value="0" step="100" class="precio-slider precio-slider-min">
+                    <label for="precio_slider_max"></label><input type="range" id="precio_slider_max" min="0" max="10000" value="10000" step="100" class="precio-slider precio-slider-max">
+                    <div class="slider-track"></div>
+                </div>
+                <div class="precio-valores">
+                    <span>$0</span>
+                    <span>$10000</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="filtros-acciones">
+            <button id="confirmar-filtros" class="btn-filtro btn-confirmar">
+                <i class="fas fa-check"></i> Confirmar filtros
+            </button>
+            <button id="reiniciar-filtros" class="btn-filtro btn-reiniciar">
+                <i class="fas fa-undo"></i> Reiniciar filtros
+            </button>
+        </div>
+    </div>
+</aside>
+
+{% block extra_js %}
+    <script src="{% static 'js/filters.js' %}"></script>
+    <script src="{% static 'js/price_sliders.js' %}"></script>
+{% endblock %}

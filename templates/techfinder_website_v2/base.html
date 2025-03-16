@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+{% load static %}
+{% include 'techfinder_website_v2/main/carrito_lateral.html' %}
+
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TechFinder{% endblock %}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+    <link rel="alternate icon" type="image/png" href="{% static 'img/favicon.ico' %}">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/user.css' %}">
+    <link rel="stylesheet" href="{% static 'css/alerts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/carrito_lateral.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- Mensajes de alerta -->
+    {% if messages %}
+    <div class="alert-container">
+        {% for message in messages %}
+        <div class="custom-alert {{ message.tags }}" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close-custom" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'img/logo.png' %}" alt="TechFinder" height="40">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Techfinder Store</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-abrir-carrito" href="#" role="button">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="badge bg-primary cart-count">{{ cart_count|default:0 }}</span>
+                        </a>
+                    </li>
+
+
+                    {% if user.is_authenticated %}
+                    <li class="nav-item nav-profile-container">
+                        <button class="nav-link profile-button" id="profileButton">
+                            <i class="fas fa-user-circle"></i>
+                        </button>
+                        {% include 'techfinder_website_v2/account/auth/profile.html' %}
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account' %}">Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary text-white" href="{% url 'account' %}">Registrarse</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Contenido principal -->
+    <main class="container py-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="footer mt-auto py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>TechFinder</h5>
+                    <p class="text-muted">Tu tienda de tecnología de confianza</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Enlaces útiles</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'privacidad' %}">Política de privacidad</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Síguenos</h5>
+                    <div class="social-links">
+                        <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-facebook original-icon"></i>
+                            <i class="fas fa-external-link-alt hover-icon"></i>
+                        </a>
+
+                        <a href="https://x.com/" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-twitter original-icon"></i>
+                            <i class="fas fa-external-link-alt hover-icon"></i>
+                        </a>
+
+                        <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-instagram original-icon"></i>
+                            <i class="fas fa-external-link-alt hover-icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="footer-content">
+                <p class="footer-text">{% now "Y" %} TechFinder, creada por Emir.</p>
+                <p class="footer-text">Proyecto Libre y Open Source bajo la licencia GPL de versión 3.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS y Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Scripts personalizados -->
+    {% block scripts %}
+    <script src="{% static 'js/profile.js' %}"></script>
+    {% endblock %}
+
+    {% if messages %}
+    <script src="{% static 'js/alerts.js' %}"></script>
+    {% endif %}
+
+    <script src="{% static 'js/carrito_lateral.js' %}"></script>
+    <script src="{% static 'js/cart_counter.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+
+
+
+{% block javascript %}
+<script>
+// Función para actualizar el badge
+function updateCartBadge() {
+    fetch('/api/cart/count/')
+        .then(response => response.json())
+        .then(data => {
+            const badge = document.querySelector('.cart-badge');
+            if (badge) {
+                badge.textContent = data.count;
+                // Opcional: ocultar badge si count es 0
+                badge.style.display = data.count > 0 ? 'inline' : 'none';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Actualizar cuando la página carga
+document.addEventListener('DOMContentLoaded', updateCartBadge);
+
+// Actualizar después de agregar al carrito
+document.querySelectorAll('.add-to-cart-button').forEach(button => {
+    button.addEventListener('click', function() {
+        // Esperar un momento para que se procese la adición al carrito
+        setTimeout(updateCartBadge, 100);
+    });
+});
+</script>
+{% endblock %}
+
+</body>
+
+</html>

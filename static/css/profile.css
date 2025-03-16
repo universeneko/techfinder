@@ -1,0 +1,315 @@
+/* Variables globales - manteniendo la paleta de colores original */
+:root {
+    --text-primary: #b8b8b8;
+    --text-secondary: #a0a0a0;
+    --fancy-purple: rgba(30, 3, 35, 0.76);
+    --light-purple: #a352a6;
+    --border-radius: 12px;
+    --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Overlay con blur */
+.profile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 9999; /* Justo debajo del profile-wrapper */
+}
+
+/* Cuando el overlay está activo */
+.profile-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Asegurar que el menú de perfil esté por encima del overlay */
+.profile-menu-container {
+    /* ... mantener propiedades existentes ... */
+    z-index: 10001;
+}
+
+/* Ajustar el z-index del wrapper si es necesario */
+.profile-wrapper {
+    position: relative;
+    z-index: 10000;
+}
+
+/* Botón del perfil mejorado */
+.profile-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    position: relative;
+    transition: transform 0.3s ease;
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.profile-button i {
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.profile-button:hover i {
+    color: var(--light-purple);
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 8px var(--light-purple));
+}
+
+/* Contenedor del menú con borde animado */
+.profile-menu-container {
+    top: calc(100% + 1rem);
+    right: 2rem;
+    width: 300px;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    opacity: 0;
+    transform: translateY(-100px);
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 10001;
+    overflow: hidden;
+    position: fixed;
+}
+
+/* Efecto de borde con múltiples partículas luminosas */
+.profile-menu-container::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background:
+        linear-gradient(90deg, transparent, var(--fancy-purple)),
+        linear-gradient(180deg, transparent, var(--light-purple)),
+        linear-gradient(270deg, transparent, var(--fancy-purple)),
+        linear-gradient(0deg, transparent, var(--light-purple));
+    background-size: 400% 400%;
+    z-index: -1;
+    animation: borderGlow 8s linear infinite;
+}
+
+/* Fondo interno del menú */
+.profile-menu-container::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: rgba(30, 30, 30, 0.98);
+    border-radius: calc(var(--border-radius) - 2px);
+    z-index: -1;
+}
+
+/* Animación del borde brillante */
+@keyframes borderGlow {
+    0%, 100% {
+        background-position: 0 0;
+    }
+    25% {
+        background-position: 100% 0;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    75% {
+        background-position: 0 100%;
+    }
+}
+
+/* Estado activo del menú */
+.profile-menu-container.active {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+}
+
+/* Cabecera del perfil */
+.profile-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: linear-gradient(45deg, rgba(102, 18, 172, 0.1), rgba(163, 82, 166, 0.1));
+}
+
+/* Avatar y texto del perfil */
+.profile-avatar i {
+    font-size: 2.5rem;
+    color: var(--light-purple);
+    filter: drop-shadow(0 0 10px rgba(163, 82, 166, 0.3));
+}
+
+.profile-info h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.profile-info p {
+    margin: 0.3rem 0 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Contenedor de items del menú */
+.profile-menu-items {
+    padding: 0.8rem;
+    text-decoration: none;
+}
+
+/* Estilo base para items del menú */
+.profile-menu-item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    color: var(--text-secondary);
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 8px;
+    margin: 0.3rem 0;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+/* Efecto hover para items normales */
+.profile-menu-item:hover {
+    background: linear-gradient(90deg,
+        rgba(102, 18, 172, 0.1),
+        rgba(163, 82, 166, 0.15));
+    color: var(--text-primary);
+    transform: translateX(5px);
+}
+
+/* Estilo especial para el botón de Logout */
+.profile-menu-item.logout-button {
+    background: linear-gradient(90deg,
+        rgba(255, 82, 122, 0.1),
+        rgba(255, 82, 122, 0.05));
+    color: #ff527a;
+}
+
+.profile-menu-item.logout-button:hover {
+    background: linear-gradient(90deg,
+        rgba(255, 82, 122, 0.2),
+        rgba(255, 82, 122, 0.1));
+    color: #ff6b8e;
+}
+
+/* Iconos en los items del menú */
+.profile-menu-item i {
+    margin-right: 1rem;
+    width: 24px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.profile-menu-item:hover i {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 5px currentColor);
+}
+
+/* Efecto de ripple al hacer click */
+.profile-menu-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center,
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.profile-menu-item:active::after {
+    opacity: 1;
+}
+
+
+/* Estilos para el formulario de perfil */
+.profile-form-container {
+    padding: 1rem;
+    background: rgba(40, 40, 40, 0.95);
+    border-radius: var(--border-radius);
+    margin-top: 1rem;
+}
+
+.profile-edit-form .form-group {
+    margin-bottom: 1rem;
+}
+
+.profile-edit-form label {
+    display: block;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.profile-edit-form input {
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.profile-edit-form input:focus {
+    border-color: var(--fancy-purple);
+    box-shadow: 0 0 0 2px rgba(102, 18, 172, 0.2);
+    outline: none;
+}
+
+.profile-form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-update, .btn-delete {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-update {
+    background: var(--fancy-purple);
+    color: white;
+}
+
+.btn-update:hover {
+    background: var(--light-purple);
+    transform: translateY(-2px);
+}
+
+.btn-delete {
+    background: rgba(255, 59, 48, 0.1);
+    color: #ff3b30;
+    border: 1px solid rgba(255, 59, 48, 0.2);
+}
+
+.btn-delete:hover {
+    background: rgba(255, 59, 48, 0.2);
+    transform: translateY(-2px);
+}

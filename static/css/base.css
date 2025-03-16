@@ -1,0 +1,457 @@
+/* Variables globales */
+:root {
+    --deep-purple: #321540;
+    --fancy-purple: rgba(114, 0, 142, 0.91);
+    --light-purple: #a352a6;
+    --dark-background: #100f10;
+    --lighter-background: #110219;
+    --text-primary: #777777;
+    --text-secondary: #b0b0b0;
+    --button-active: #5e1f70;
+    --button-hover: #4b1c60;
+
+    /* Sombras y efectos */
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    --border-radius: 12px;
+}
+
+/* Estilos generales */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--dark-background);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+    font-family: 'Space Grotesk', sans-serif;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.02);
+    padding: 1rem 0;
+    position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-primary, #fff);
+}
+
+/* Efecto de brillo en el borde inferior */
+.navbar::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--fancy-purple),
+        var(--light-purple),
+        var(--fancy-purple),
+        transparent
+    );
+    animation: shimmer 4s linear infinite;
+}
+
+/* Estilos para los links de navegación */
+.nav-link {
+    font-weight: 500;
+    letter-spacing: 0;
+    padding: 0.5rem 1rem;
+    margin: 0 0.2rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    color: var(--text-primary, #fff) !important;
+}
+
+.nav-link:hover {
+    background: rgba(var(--fancy-purple), 0.1);
+    transform: translateY(-1px);
+    color: var(--light-purple, #c9a3ed) !important;
+}
+
+.nav-link.btn-primary {
+    background: linear-gradient(135deg, var(--fancy-purple), var(--light-purple));
+    border: none;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(var(--fancy-purple), 0.2);
+    transition: all 0.3s ease;
+}
+
+.nav-link.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(var(--fancy-purple), 0.3);
+}
+
+/* Estilos para el dropdown */
+.dropdown-menu {
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.dropdown-item {
+    color: var(--text-secondary);
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: rgba(var(--fancy-purple), 0.1);
+    color: var(--fancy-purple);
+    transform: translateX(5px);
+}
+
+.dropdown-divider {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Animación del brillo */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px;
+    }
+    100% {
+        background-position: 1000px;
+    }
+}
+
+/* Contenedor del icono del carrito */
+.nav-item .nav-link {
+    position: relative;
+}
+
+.badge.bg-primary {
+    background-color: #ff3b3b !important; /* Usando tu variable de color púrpura */
+}
+
+/* Estilo para el contador del carrito */
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff3b3b;
+    color: white;
+    border-radius: 50%;
+    padding: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 5px rgba(255, 59, 59, 0.3);
+    animation: pulseCart 2s infinite;
+}
+
+/* Botones personalizados */
+.btn-primary {
+    background-color: var(--button-active);
+    border: none;
+    padding: 0.7rem 1.8rem;
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+.footer {
+    font-family: 'Inter', sans-serif;
+    position: relative;
+    background-color: var(--lighter-background);
+    padding: 4rem 0 2rem;
+    margin-top: 4rem;
+    overflow: hidden;
+}
+
+/* Efecto de brillo en la parte superior */
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--light-purple),
+        var(--fancy-purple),
+        var(--light-purple),
+        transparent
+    );
+    box-shadow: 0 0 15px var(--fancy-purple),
+                0 0 25px var(--light-purple);
+}
+
+/* Estilos del contenido */
+.footer h5 {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+}
+
+.footer p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.footer .text-muted {
+    color: var(--text-secondary) !important;
+    opacity: 0.8;
+}
+
+/* Enlaces */
+.footer ul li {
+    margin-bottom: 0.8rem;
+}
+
+.footer ul li a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    position: relative;
+}
+
+.footer ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--light-purple);
+    transition: width 0.3s ease;
+}
+
+.footer ul li a:hover {
+    color: var(--text-primary);
+}
+
+.footer ul li a:hover::after {
+    width: 100%;
+}
+
+/* Redes sociales */
+.social-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.social-links a {
+    color: var(--text-secondary);
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.05);
+    text-decoration: none;
+    position: relative;
+}
+
+.social-links a:hover {
+    color: #f1befd;
+    background-color: #2b263a;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(94, 31, 112, 0.4);
+}
+
+/* Manejo de los iconos */
+.social-links a .fa-external-link-alt {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Estados en hover */
+.social-links a:hover i:not(.fa-external-link-alt) {
+    opacity: 0;
+}
+
+.social-links a:hover i.fa-external-link-alt {
+    opacity: 1;
+}
+
+
+
+/* Icono de redirección (inicialmente oculto) */
+.social-links a .fa-external-link-alt {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Línea divisoria */
+.footer hr {
+    margin: 2rem 0;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Copyright */
+.footer .text-center p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+
+/* Efecto de hover en el logo */
+.footer h5:first-of-type {
+    background: linear-gradient(
+        90deg,
+        var(--text-primary),
+        var(--light-purple)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .footer {
+        padding: 3rem 0 1.5rem;
+    }
+
+    .footer .col-md-4 {
+        margin-bottom: 2.5rem;
+    }
+
+    .footer .col-md-4:last-child {
+        margin-bottom: 0;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+}
+
+/* Animación suave al cargar */
+.footer .container {
+    animation: fadeInUp 0.8s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilos para el contenedor del copyright y licencia */
+.footer-content {
+    font-family: 'Space Grotesk', sans-serif;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin: 2rem auto;
+    max-width: 600px;
+    overflow: hidden;
+}
+
+/* Efecto de luz girando mejorado */
+.footer-content::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        var(--fancy-purple) 25%,
+        var(--light-purple) 50%,
+        var(--fancy-purple) 75%,
+        transparent 100%
+    );
+    opacity: 0.5;
+    animation: rotate 8s linear infinite;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+/* Capa para el contenido */
+.footer-content::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: var(--lighter-background);
+    border-radius: 10px;
+    z-index: 1;
+    backdrop-filter: blur(5px);
+}
+
+/* Estilo del texto */
+.footer-text {
+    font-family: 'Space Grotesk', sans-serif;
+    position: relative;
+    z-index: 2;
+    color: var(--text-secondary);
+    margin: 0.5rem 0;
+    text-align: center;
+}
+
+/* Animación de rotación */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Animación adicional para suavizar el efecto */
+.footer-content {
+    animation: glow 4s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 5px rgba(var(--fancy-purple), 0.2);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(var(--fancy-purple), 0.4);
+    }
+}
+
+/* Estilo especial para el copyright */
+.footer-text:first-child {
+    font-weight: 500;
+}

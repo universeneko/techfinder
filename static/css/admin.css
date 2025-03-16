@@ -1,0 +1,939 @@
+/* Contenedor principal de administración */
+.admin-container {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(90deg, var(--deep-purple), var(--fancy-purple));
+    cursor: pointer;
+}
+
+.section-header h2 {
+    color: var(--text-primary);
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.file-name {
+    display: block;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: -20px;
+}
+
+/* Tabla de dispositivos */
+.devices-table-section {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+}
+
+.table-responsive {
+    overflow-x: auto;
+    border-radius: var(--border-radius);
+}
+
+.devices-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.devices-table th {
+    background: linear-gradient(90deg,
+    #171717 0%,
+    #1b1b1b 50%,
+    #171717 100%
+    );
+
+
+    color: var(--text-primary);
+    padding: 1.2rem;
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Primera y última celda del encabezado con bordes redondeados */
+.devices-table th:first-child {
+    border-top-left-radius: var(--border-radius);
+}
+
+.devices-table th:last-child {
+    border-top-right-radius: var(--border-radius);
+}
+
+/* Celdas de datos */
+.devices-table td {
+    padding: 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+}
+
+/* Efecto hover en las filas */
+.devices-table tr:hover {
+    background: rgba(var(--fancy-purple), 0.1);
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow);
+}
+
+.devices-table tr {
+    transition: all 0.3s ease;
+}
+
+.devices-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Celda de imagen mejorada */
+.image-cell {
+    padding: 0.5rem;
+}
+
+/* Celda de imagen */
+.image-cell img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.image-cell img:hover {
+    transform: scale(1.1);
+    box-shadow: var(--hover-shadow);
+    border-color: var(--fancy-purple);
+}
+
+/* Botones dentro de la tabla */
+.devices-table .btn {
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.devices-table .btn-primary {
+    background: linear-gradient(135deg, var(--fancy-purple), var(--light-purple));
+    border: none;
+    box-shadow: 0 4px 15px rgba(102, 18, 172, 0.2);
+}
+
+.devices-table .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 18, 172, 0.3);
+}
+
+/* Estado de carga y animaciones */
+.devices-table-section.loading {
+    position: relative;
+}
+
+.devices-table-section.loading::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg,
+        transparent,
+        var(--fancy-purple),
+        var(--light-purple),
+        var(--fancy-purple),
+        transparent
+    );
+    animation: shimmer 4s linear infinite;
+}
+
+@media (max-width: 768px) {
+    .devices-table th,
+    .devices-table td {
+        padding: 0.8rem;
+    }
+
+    .image-cell img {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Contenedor para los botones */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* Estilos base comunes para los botones de acción */
+.btn-editar,
+.btn-guardar,
+.btn-eliminar {
+    padding: 0.6rem;
+    border: none;
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0.3rem;
+}
+
+/* Botón Editar */
+.btn-editar {
+    background: linear-gradient(135deg, #2b5876, #4f87bc);
+    color: #a8c0ff;
+    box-shadow: 0 4px 15px rgba(43, 88, 118, 0.2);
+}
+
+.btn-editar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(43, 88, 118, 0.3);
+    background: linear-gradient(135deg, #3b6b8c, #5e5286);
+}
+
+/* Botón Guardar */
+.btn-guardar {
+    background: linear-gradient(135deg, #56ab2f, #a8e063);
+    color: #e8f5e9;
+    box-shadow: 0 4px 15px rgba(86, 171, 47, 0.2);
+}
+
+.btn-guardar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(86, 171, 47, 0.3);
+    background: linear-gradient(135deg, #67bc40, #b8f073);
+}
+
+/* Botón Eliminar */
+.btn-eliminar {
+    background: linear-gradient(135deg, #cb2d3e, #ef473a);
+    color: #ffe0e3;
+    box-shadow: 0 4px 15px rgba(203, 45, 62, 0.2);
+}
+
+.btn-eliminar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(203, 45, 62, 0.3);
+    background: linear-gradient(135deg, #db3d4e, #ff574a);
+}
+
+/* Estilos para los íconos dentro de los botones */
+.btn-editar i,
+.btn-guardar i,
+.btn-eliminar i {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+/* Efecto hover para los íconos */
+.btn-editar:hover i,
+.btn-guardar:hover i,
+.btn-eliminar:hover i {
+    transform: scale(1.1);
+}
+
+/* Estado deshabilitado */
+.btn-editar:disabled,
+.btn-guardar:disabled,
+.btn-eliminar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Efecto de pulsación al hacer click */
+.btn-editar:active,
+.btn-guardar:active,
+.btn-eliminar:active {
+    transform: scale(0.95);
+}
+
+/* Animación de aparición suave */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btn-guardar.show {
+    display: flex !important;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* Botón submit */
+.btn-submit {
+    background: linear-gradient(135deg, var(--fancy-purple), var(--light-purple));
+    color: var(--text-primary);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+/* Notificaciones */
+.alert-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1000;
+}
+
+.custom-alert {
+    padding: 1rem 1.5rem;
+    border-radius: var(--border-radius);
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    animation: slideIn 0.3s ease;
+    box-shadow: var(--card-shadow);
+}
+
+.custom-alert.success {
+    border-left: 4px solid #4CAF50;
+}
+
+.custom-alert.error {
+    border-left: 4px solid #ff3b3b;
+}
+
+.custom-alert.alert-dismiss {
+    animation: slideOut 0.3s ease forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Campos editables */
+.editable input,
+.editable select {
+    width: 100%;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--fancy-purple);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+}
+
+/* Estilos para el input de archivo personalizado */
+.custom-file-input {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.hidden-file-input {
+    display: none;
+}
+
+.file-selector-button {
+    background: var(--fancy-purple);
+    color: var(--text-primary);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.file-selector-button:hover {
+    background: var(--light-purple);
+    transform: translateY(-2px);
+}
+
+.file-name {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 4px;
+    color: white;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.notification.success {
+    background-color: #4CAF50;
+}
+
+.notification.error {
+    background-color: #f44336;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+    min-height: 100px;
+}
+
+.product-image img {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: contain;
+}
+
+.description-cell {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.image-preview {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.custom-file-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hidden-file-input {
+    display: none;
+}
+
+.file-selector-button {
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.file-name {
+    margin-left: 10px;
+    color: #666;
+}
+
+
+
+
+
+
+/* Sección de añadir dispositivo */
+.add-device-section {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+}
+
+.add-device-form {
+    max-height: 2000px;
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.5s ease-in-out;
+    overflow: hidden;
+    padding: 1.5rem;
+}
+
+.add-device-form.collapsed {
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+/* Contenedor principal */
+.add-device-section {
+    background: var(--lighter-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Cabecera de la sección */
+.section-header {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+/* Contenedor del formulario */
+.form-container {
+    display: flex;
+    padding: 1.5rem;
+    gap: 2rem;
+}
+
+/* Sección de imagen */
+.image-section {
+    flex: 1;
+    max-width: 300px;
+}
+
+.image-preview {
+    margin-top: 1rem;
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    height: 200px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Separador vertical */
+.vertical-divider {
+    width: 1px;
+    background: linear-gradient(
+            to bottom,
+            transparent,
+            var(--fancy-purple),
+            var(--light-purple),
+            var(--fancy-purple),
+            transparent
+    );
+    margin: 0 1rem;
+}
+
+/* Secciones de información y descripción */
+.info-section {
+    flex: 2;
+}
+
+.description-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.description-section textarea {
+    flex-grow: 1;
+    resize: none;
+    margin-bottom: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    color: var(--text-secondary);
+}
+
+/* Estilos de los campos */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius);
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--fancy-purple);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(102, 18, 172, 0.2);
+}
+
+/* Selector de archivo */
+.file-selector-button {
+    width: 100%;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, var(--fancy-purple), var(--light-purple));
+    border: none;
+    border-radius: var(--border-radius);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.file-selector-button:hover {
+    background: linear-gradient(135deg, var(--light-purple), var(--fancy-purple));
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+.file-name {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.hidden-file-input {
+    display: none;
+}
+
+/* Botón de submit */
+.btn-submit {
+    background: linear-gradient(135deg, var(--fancy-purple), var(--light-purple));
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--card-shadow);
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+    background: linear-gradient(135deg, var(--light-purple), var(--fancy-purple));
+}
+
+/* Efectos de hover en campos */
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+    border-color: var(--fancy-purple);
+}
+
+/* Estilo para opciones del select */
+.form-group select option {
+    background: var(--dark-background);
+    color: var(--text-secondary);
+}
+
+/* Estilos para el botón toggle */
+.toggle-btn {
+    background-color: var(--button-active);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    position: relative;
+    z-index: 2;
+}
+
+.toggle-btn:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--hover-shadow);
+}
+
+/* Animación del ícono */
+.toggle-btn .fas {
+    transition: transform 0.3s ease-in-out;
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.toggle-btn .fas.rotated {
+    transform: rotate(180deg);
+}
+
+/* Efecto de active al hacer clic */
+.toggle-btn:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+/* Estilos para el formulario colapsable */
+.add-device-form {
+    transition: all 0.3s ease-in-out;
+    max-height: 2000px;
+    opacity: 1;
+    overflow: hidden;
+    background: var(--lighter-background);
+    border-radius: var(--border-radius);
+    margin-top: 0.5rem;
+}
+
+.add-device-form.collapsed {
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.toggle-btn {
+    /* Estructura básica cuadrada */
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Estilo del botón */
+    background: transparent;
+    border: 2px solid #ff00fb; /* Color base del borde */
+    border-radius: 8px; /* Bordes ligeramente redondeados */
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+
+    /* Efecto de brillo en los bordes */
+    box-shadow: 0 0 5px rgba(208, 0, 255, 0.5); /* Brillo suave constante */
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+/* Efecto hover para intensificar el brillo */
+.toggle-btn:hover {
+    box-shadow: 0 0 10px rgba(191, 0, 255, 0.8),
+    0 0 20px rgba(255, 0, 206, 0.4);
+}
+
+/* Estilos para el ícono */
+.toggle-btn .fas {
+    font-size: 16px;
+    color: #ff00ec;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Rotación del ícono */
+.toggle-btn .fas.rotated {
+    transform: rotate(-180deg); /* Cambiado a -180 para corregir la dirección */
+}
+
+/* Estado activo del botón */
+.toggle-btn:active {
+    transform: scale(0.95);
+}
+
+/* Modal de confirmación */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    bottom: 40px;
+    right: 40px;
+    left: auto;
+    z-index: 9999;
+    width: 300px;
+    height: auto;
+    overflow: visible;
+
+}
+
+
+.modal-content {
+    width: 300px;
+    right: 0;
+    background: rgba(73, 2, 2, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(220, 53, 69, 0.4);
+    border-radius: 8px;
+    padding: 1.5rem;
+    color: #ffffff;
+    position: absolute;
+    box-shadow:
+            0 0 50px rgba(220, 53, 69, 0.2),
+            0 0 100px rgba(220, 53, 69, 0.1),
+            inset 0 0 50px rgba(220, 53, 69, 0.05);
+    animation: slideInRight 0.3s ease-out forwards;
+}
+
+/* Línea decorativa lateral */
+.modal-content::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: #dc3545;
+    box-shadow: 0 0 10px #dc3545;
+    border-radius: 8px 0 0 8px;
+}
+
+/* Título del modal */
+.modal-content h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+/* Texto del modal */
+.modal-content p {
+    margin: 0 0 1.5rem 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Contenedor de botones */
+.modal-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+/* Estilos base para ambos botones */
+.btn-confirmar,
+.btn-cancelar {
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    border: none;
+}
+
+/* Botón de confirmar */
+.btn-confirmar {
+    background: rgba(220, 53, 69, 0.8);
+    color: #fff;
+    border: 2px solid rgba(220, 53, 69, 0.4);
+    box-shadow: 0 0 20px rgba(220, 53, 69, 0.2);
+}
+
+.btn-confirmar:hover {
+    background: rgba(220, 53, 69, 1);
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(220, 53, 69, 0.3);
+}
+
+/* Botón de cancelar */
+.btn-cancelar {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-cancelar:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+/* Animaciones */
+@keyframes slideInRight {
+    from {
+        transform: translate(100%, -50%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(0, -50%);
+        opacity: 1;
+    }
+}
+
+/* Clase para cuando el modal se está cerrando */
+.modal.closing {
+    animation: slideOutRight 0.3s ease-out forwards;
+}
+
+@keyframes slideOutRight {
+    to {
+        transform: translate(100%, -50%);
+        opacity: 0;
+    }
+}
+
+/* Clase para mostrar el modal */
+.modal.show {
+    display: block;
+}

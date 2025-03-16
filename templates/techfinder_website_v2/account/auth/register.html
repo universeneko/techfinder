@@ -1,0 +1,31 @@
+<div class="form-header">
+    <h2>Crear Cuenta</h2>
+</div>
+<form method="POST" action="{% url 'register' %}" class="auth-form-content">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="first_name">Nombre</label>
+        <input type="text" id="first_name" name="first_name" required>
+    </div>
+    <div class="form-group">
+        <label for="last_name">Apellido</label>
+        <input type="text" id="last_name" name="last_name" required>
+    </div>
+    <div class="form-group">
+        <label for="register_email">Email</label>
+        <input type="email" id="register_email" name="email" required>
+    </div>
+    <div class="form-group">
+        <label for="register_password">Contraseña</label>
+        <input type="password" id="register_password" name="password" required>
+    </div>
+    <div class="form-group">
+        <label for="confirm_password">Confirmar Contraseña</label>
+        <input type="password" id="confirm_password" name="confirm_password" required>
+    </div>
+    <button type="submit" class="btn-auth">Crear Cuenta</button>
+    <p class="form-switch">
+        ¿Ya tienes cuenta?
+        <a href="javascript:void(0)" onclick="toggleForm('login-form')">Inicia sesión</a>
+    </p>
+</form>

@@ -1,0 +1,35 @@
+{# templates/techfinder_website_v2/components/productos_grid.html #}
+<div class="productos-grid">
+    {% for producto in productos %}
+    <div class="producto-card">
+        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="producto-imagen">
+        <div class="producto-info">
+            <h3>{{ producto.nombre }}</h3>
+            <div class="producto-rating">
+                {% for i in "12345"|make_list %}
+                {% if forloop.counter <= producto.rating %}
+                    <i class="fas fa-star"></i>
+                {% else %}
+                    <i class="far fa-star"></i>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <p class="producto-precio">${{ producto.precio }}</p>
+            <button class="btn-agregar-carrito" data-producto-id="{{ producto.id }}">
+                <i class="fas fa-cart-plus"></i> Añadir al carrito
+            </button>
+            <div class="stock-info">
+                <span class="stock-label">Stock disponible:</span>
+                <span class="stock-cantidad">{{ producto.stock }}</span>
+            </div>
+        </div>
+        <div class="producto-descripcion">
+            <p>{{ producto.descripcion }}</p>
+        </div>
+    </div>
+    {% empty %}
+    <div class="no-productos">
+        <p>No hay productos disponibles con los filtros seleccionados</p>
+    </div>
+    {% endfor %}
+</div>

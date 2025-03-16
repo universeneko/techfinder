@@ -1,0 +1,130 @@
+/* Contenedor principal */
+.user-profile-container {
+    max-width: 600px; /* Reducido de 800px para hacerlo más compacto */
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+.profile-title {
+    text-align: center;
+    margin-bottom: 2rem; /* Reducido de 2.5rem */
+    color: var(--text-primary);
+    font-size: 1.8rem; /* Reducido de 2.2rem */
+    font-weight: 600;
+}
+
+/* Tarjeta del perfil */
+.profile-card {
+    background: var(--lighter-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    padding: 2rem; /* Reducido de 2.5rem */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Layout de dos columnas para campos adyacentes */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+
+}
+
+.form-group label {
+    display: block;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.9rem; /* Reducido de 0.95rem */
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.7rem 1rem; /* Reducido de 0.9rem */
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:hover {
+    background: rgba(147, 51, 234, 0.1); /* Color morado tenue */
+    border-color: rgba(147, 51, 234, 0.3);
+    color: #b985f4; /* Color del texto al hacer hover */
+    outline: none;
+}
+
+.form-control:focus {
+    background: rgba(147, 51, 234, 0.15); /* Un poco más intenso al estar en focus */
+    border-color: var(--fancy-purple);
+    outline: none;
+    color: #c492f5; /* Color del texto al estar enfocado */
+    box-shadow: 0 0 0 2px rgba(147, 51, 234, 0.2);
+}
+
+/* Sección de contraseñas */
+.password-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.current-password {
+    margin-bottom: 1rem;
+}
+
+.new-passwords {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* Botones */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem; /* Reducido de 2.5rem */
+}
+
+.btn {
+    padding: 0.7rem 1.5rem; /* Reducido de 0.8rem 1.8rem */
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+/* Efecto de brillo en el borde superior */
+.profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+            90deg,
+            transparent,
+            var(--fancy-purple),
+            var(--light-purple),
+            var(--fancy-purple),
+            transparent
+    );
+}
+
+/* Alertas más compactas */
+.alert {
+    padding: 0.8rem 1.2rem;
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+}

@@ -1,0 +1,301 @@
+:root {
+    --deep-purple: #4A148C;
+    --fancy-purple: #6612AC;
+    --light-purple: #8E24AA;
+    --text-primary: #FFFFFF;
+    --text-secondary: #B3B3B3;
+    --border-radius: 8px;
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Estructura base del carrito lateral */
+.carrito-lateral {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 650px; /* Cambia esto por el tamaño que desees */
+    max-width: none;
+    min-height: 111vh;
+    max-height: 100%;
+    background: rgba(20, 20, 24, 0.97);
+    backdrop-filter: blur(12px);
+    box-shadow: -4px 0 20px rgba(255, 0, 255, 0.15),
+                inset 0 0 30px rgba(255, 0, 255, 0.05);
+    transition: right 0.35s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Space Grotesk', sans-serif;
+    border-left: 1px solid #ff00ff;
+}
+
+
+.carrito-lateral.abierto {
+    right: 0;
+    transition: right 0.3s ease;
+}
+
+/* Overlay del carrito */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(3px);
+    display: none;
+    z-index: 999;
+}
+
+.overlay.activo {
+    display: block;
+}
+
+/* Header del carrito */
+.carrito-header {
+    background: linear-gradient(90deg, var(--deep-purple), var(--fancy-purple));
+    padding: 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.carrito-header h2 {
+    color: var(--text-primary);
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+/* Contenido principal del carrito */
+.carrito-contenido {
+    flex: 1;
+    overflow-y: auto;
+    height: 100%;
+}
+
+/* Estilos para cada producto en el carrito */
+.producto-carrito {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+}
+
+.producto-carrito:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Contenedor de imagen */
+.producto-imagen-container {
+    flex: 0 0 140px;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius);
+    padding: 0.2rem;
+}
+
+.producto-imagen {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.producto-imagen:hover {
+    transform: scale(1);
+}
+
+/* Separador vertical */
+.separador-vertical {
+    width: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 0.5rem;
+    align-self: stretch;
+}
+
+/* Detalles del producto */
+.producto-detalles {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.producto-nombre {
+    color: var(--text-primary);
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 500;
+}
+
+.producto-precio {
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* Controles de cantidad y eliminación */
+.controles-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.cantidad-controles {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.btn-cantidad {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--deep-purple), var(--fancy-purple));
+    border: none;
+    border-radius: 4px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-cantidad:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+.cantidad {
+    color: var(--text-primary);
+    min-width: 20px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.btn-eliminar {
+    padding: 0.4rem 0.7rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #ff3b3b, #ff6b6b);
+    border: none;
+    box-shadow: 0 4px 15px rgba(255, 59, 59, 0.2);
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.btn-eliminar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 59, 59, 0.3);
+}
+
+/* Footer del carrito */
+.carrito-footer {
+    background: linear-gradient(90deg,
+    rgba(23, 23, 23, 0.95),
+    rgba(27, 27, 27, 0.95)
+    );
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.total {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.btn-pagar {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--fancy-purple), var(--light-purple));
+    color: var(--text-primary);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-pagar:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+/* Estilos para el botón de cerrar */
+.btn-cerrar {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ff00ff;  /* Rosa neón brillante */
+    background: transparent;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px #ff00ff,
+                inset 0 0 10px #ff00ff;
+}
+
+/* Estilo para la X */
+.btn-cerrar::before,
+.btn-cerrar::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background-color: #ff00ff;
+    box-shadow: 0 0 5px #ff00ff,
+                0 0 10px #ff00ff,
+                0 0 20px #ff00ff;
+    transition: all 0.3s ease;
+}
+
+.btn-cerrar::before {
+    transform: rotate(45deg);
+}
+
+.btn-cerrar::after {
+    transform: rotate(-45deg);
+}
+
+/* Efecto hover */
+.btn-cerrar:hover {
+    border-color: #ff69ff;  /* Rosa más claro para el hover */
+    box-shadow: 0 0 20px #ff00ff,
+                inset 0 0 20px #ff00ff;
+}
+
+.btn-cerrar:hover::before,
+.btn-cerrar:hover::after {
+    background-color: #ff69ff;
+    box-shadow: 0 0 10px #ff69ff,
+                0 0 20px #ff69ff,
+                0 0 30px #ff69ff;
+}
+
+@media (max-width: 768px) {
+    .carrito-lateral {
+        width: 90vw !important;
+    }
+}

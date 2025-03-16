@@ -1,0 +1,129 @@
+/* Contenedor principal de alertas */
+.alert-container {
+    position: fixed;
+    top: 6%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 90%;
+    max-width: 500px;
+}
+
+/* Estilos base para las alertas */
+.custom-alert {
+    padding: 1rem 2.5rem 1rem 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    background: rgba(17, 2, 25, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    position: relative;
+    border-left: 4px solid;
+    animation: fadeInDown 0.5s ease forwards;
+    color: var(--text-primary);
+}
+
+/* Estilos específicos para cada tipo de alerta */
+.custom-alert.success {
+    border-left-color: #00dc82;
+    background: rgba(0, 220, 130, 0.1);
+}
+
+.custom-alert.error,
+.custom-alert.danger {
+    border-left-color: #ff3b3b;
+    background: rgba(255, 59, 59, 0.1);
+}
+
+.custom-alert.warning {
+    border-left-color: #ffd600;
+    background: rgba(255, 214, 0, 0.1);
+}
+
+.custom-alert.info {
+    border-left-color: #0ea5e9;
+    background: rgba(14, 165, 233, 0.1);
+}
+
+/* Botón de cerrar */
+.btn-close-custom {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+/* Color del ícono según el tipo de alerta */
+.success .btn-close-custom {
+    color: #00dc82;
+}
+
+.error .btn-close-custom,
+.danger .btn-close-custom {
+    color: #ff3b3b;
+}
+
+.warning .btn-close-custom {
+    color: #ffd600;
+}
+
+.info .btn-close-custom {
+    color: #0ea5e9;
+}
+
+.btn-close-custom:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Animaciones */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.alert-dismiss {
+    animation: fadeOut 0.5s ease forwards;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .alert-container {
+        width: 95%;
+        padding: 0 10px;
+    }
+
+    .custom-alert {
+        padding: 0.8rem 2rem 0.8rem 1rem;
+        font-size: 0.9rem;
+    }
+}

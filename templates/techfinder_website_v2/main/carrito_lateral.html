@@ -1,0 +1,53 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/notificaciones.css' %}">
+
+<!-- carrito_lateral.html -->
+<div id="carrito-lateral" class="carrito-lateral">
+    {% csrf_token %}
+    <div class="carrito-header">
+        <h3>Carrito de Compras</h3>
+        <button id="cerrar-carrito" class="btn-cerrar">×</button>
+    </div>
+
+    <div class="carrito-contenido">
+        <div id="productos-carrito" class="productos-lista">
+            <template id="producto-carrito-template">
+                <div class="producto-carrito" data-producto-id="${producto.id}">
+                    <div class="producto-imagen-container">
+                        <img class="producto-imagen" src="" alt="Imagen producto">
+                    </div>
+                    <div class="separador-vertical"></div>
+                    <div class="producto-detalles">
+                        <h4 class="producto-nombre"></h4>
+                        <div class="producto-precio"></div>
+                        <div class="controles-container">
+                            <div class="cantidad-controles">
+                                <button class="btn-cantidad" data-accion="decrementar">-</button>
+                                <span class="cantidad"></span>
+                                <button class="btn-cantidad" data-accion="incrementar">+</button>
+                            </div>
+                            <button class="btn-eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <div class="carrito-footer">
+        <div class="total">
+            <span>Total:</span>
+            <span id="total-carrito">$0</span>
+        </div>
+        <button id="btn-pagar" class="btn-pagar">Continuar con el pago</button>
+    </div>
+</div>
+
+<div id="overlay" class="overlay"></div>
+<div id="sistema-notificaciones"></div>
+
+<script src="{% static 'js/carrito_lateral.js' %}"></script>
+<script src="{% static 'js/notificaciones.js' %}"></script>
+<script src="{% static 'js/carrito.js' %}"></script>
