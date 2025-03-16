@@ -7,6 +7,8 @@
 
 - **Gestión de usuarios**: Permite crear usuarios, editar sus datos, verlos y asignarles permisos.
 - **Gestión de productos**: Permite añadir, editar, eliminar y ver productos disponibles en la tienda.
+- **Gestión y filtrado**: Permite filtrar elementos del sitio web usando la barra lateral
+- **Carrito de compras**: Da la posibilidad de añadir productos al carrito de compras y ver el total.
 
 ## Crear un usuario con permisos elevados
 
