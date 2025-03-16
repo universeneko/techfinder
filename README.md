@@ -48,9 +48,9 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
 2. **Crea un entorno virtual en el directorio raíz del proyecto**:
 
    ```bash
-   python -m venv venv
+   python -m venv .venv
    source venv/bin/activate  # Para macOS/Linux
-   venv\Scripts\activate     # Para Windows
+   .venv\Scripts\activate     # Para Windows
    ```
 
 3. **Instala las dependencias**:
