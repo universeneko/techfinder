@@ -45,7 +45,7 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
    cd techfinder-website
    ```
 
-2. **Crea un entorno virtual en el directorio raíz del proyecto** (opcional, pero recomendado):
+2. **Crea un entorno virtual en el directorio raíz del proyecto**:
 
    ```bash
    python -m venv venv
