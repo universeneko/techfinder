@@ -49,6 +49,10 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
 
    ```bash
    python -m venv .venv
+    ```
+    
+    Luego hay que ejecutar un segundo comando para habilitar el entorno virtual, dependiendo del sistema operativo hay que ejecutar un comando diferente.
+    ```bash
    source venv/bin/activate  # Para macOS/Linux
    .venv\Scripts\activate     # Para Windows
    ```
@@ -74,10 +78,12 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
    Para ejecutar el servidor, usa:
 
    ```bash
-   python manage.py runserver [ip o host, ej: 0.0.0.0]
+   python manage.py runserver 0.0.0.0:8000
    ```
 
    - Se recomienda usar **localhost** o **0.0.0.0** para evitar problemas con configuraciones adicionales.
+   - Puede usarse cualquier otro puerto pero en este caso se hará con el: **8000**
+   - Si se ejecuta el servidor en **0.0.0.0** se debe acceder a http://localhost:8000
    - Si deseas usar una IP personalizada, modifica el archivo `settings.py` y agrega tu IP en la variable `ALLOWED_HOSTS`:
 
      ```python
