@@ -9,6 +9,7 @@
 - **Gestión de productos**: Permite añadir, editar, eliminar y ver productos disponibles en la tienda.
 - **Gestión y filtrado**: Permite filtrar elementos del sitio web usando la barra lateral
 - **Carrito de compras**: Da la posibilidad de añadir productos al carrito de compras y ver el total.
+- **Productos**: Se incluyen dispositivos previamente cargados en la base de datos, pero puedes añadir más productos o eliminar los existentes según consideres necesario.
 
 ## Crear un usuario con permisos elevados
 
@@ -38,14 +39,27 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
 
 ## Instalación
 
-1. **Clona el repositorio**:
+1. **Clona el repositorio o descarga el Zip y extraelo**:
 
    ```bash
    git clone https://github.com/universeneko/techfinder
    cd techfinder-website
    ```
+   
+   **Importante**: En powershell es necesario habilitar la ejecución de scripts antes de proceder con la ejecución de los comandos de python.
+   
+   Puedes hacerlo con los siguientes comandos:
+   ```bash
+   Set-ExecutionPolicy RemoteSigned
+   Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+   ```
 
 2. **Crea un entorno virtual en el directorio raíz del proyecto**:
+
+
+Haz `cd` al directorio raiz
+
+En el directorio raiz del proyecto, donde se ven archivos cómo **requiriments.txt** ejecuta en la powershell:
 
    ```bash
    python -m venv .venv
@@ -96,7 +110,6 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
 
 - **Carrito de compras**: El carrito funciona correctamente cuando no se aplican filtros. Si aplicas filtros, el carrito no permite añadir productos debido a un error de lógica en el código.
 - **Slider de productos**: Inicialmente funcionaba, pero actualmente no lo hace más. Solo el slider de "máximo" funciona, y el de "mínimo" está desactivado.
-- **Productos**: Se incluyen dispositivos previamente cargados en la base de datos, pero puedes añadir más productos o eliminar los existentes según consideres necesario.
 
 ## Conclusión
 
