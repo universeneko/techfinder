@@ -39,14 +39,14 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
 
 ## Instalación
 
-1. **Clona el repositorio o descarga el Zip y extraelo**:
+1. **Clona el repositorio** (ó descarga el .zip y extraelo):
 
    ```bash
    git clone https://github.com/universeneko/techfinder
    cd techfinder-website
    ```
    
-   **Importante**: En powershell es necesario habilitar la ejecución de scripts antes de proceder con la ejecución de los comandos de python.
+   **Importante**: En la powershell es necesario habilitar la ejecución de scripts antes de proceder a ejecutar de los comandos de python.
    
    Puedes hacerlo con los siguientes comandos:
    ```bash
@@ -60,7 +60,7 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
 
     Haz `cd` al directorio raiz
 
-    En el directorio raiz del proyecto, donde se ven archivos cómo **requiriments.txt** ejecuta en la powershell:
+    En el directorio raiz del proyecto, donde están archivos cómo **"requiriments.txt"** ejecuta en la powershell los siguiente comandos:
 
 
 
@@ -68,16 +68,16 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
    python -m venv .venv
     ```
     
-    Este comando no muestra ningun mensaje, pero mientras no salte ningún error todo va bien
+    Este comando no muestra **ningún** mensaje, pero mientras no salte ningún error todo va bien.
     
     Luego hay que ejecutar un segundo comando para habilitar el entorno virtual, dependiendo del sistema operativo hay que ejecutar un comando diferente.
     
-    **Para Windows**
+    **Para Windows**:
     ```bash
    .venv\Scripts\activate
    ```
    
-    **Para macOS/Linux**
+    **Para macOS/Linux**:
    ```bash
    source venv/bin/activate
    ```   
