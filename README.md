@@ -53,6 +53,8 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
    Set-ExecutionPolicy RemoteSigned
    Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
    ```
+   
+   ---
 
 2. **Crea un entorno virtual en el directorio raíz del proyecto**:
 
@@ -66,11 +68,20 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
    python -m venv .venv
     ```
     
+    Este comando no muestra ningun mensaje, pero mientras no salte ningún error todo va bien
+    
     Luego hay que ejecutar un segundo comando para habilitar el entorno virtual, dependiendo del sistema operativo hay que ejecutar un comando diferente.
+    
+    **Para Windows**
     ```bash
-   source venv/bin/activate  # Para macOS/Linux
-   .venv\Scripts\activate     # Para Windows
+   .venv\Scripts\activate
    ```
+   
+    **Para macOS/Linux**
+   ```bash
+   source venv/bin/activate
+   ```   
+---
 
 3. **Instala las dependencias**:
 
@@ -87,7 +98,7 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
    ```bash
    python manage.py migrate
    ```
-
+---
 5. **Ejecuta el servidor**:
 
    Para ejecutar el servidor, usa:
