@@ -56,10 +56,11 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
 
 2. **Crea un entorno virtual en el directorio raíz del proyecto**:
 
+    Haz `cd` al directorio raiz
 
-Haz `cd` al directorio raiz
+    En el directorio raiz del proyecto, donde se ven archivos cómo **requiriments.txt** ejecuta en la powershell:
 
-En el directorio raiz del proyecto, donde se ven archivos cómo **requiriments.txt** ejecuta en la powershell:
+
 
    ```bash
    python -m venv .venv
