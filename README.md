@@ -121,11 +121,10 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
 ## Problemas conocidos
 
 - **Carrito de compras**: El carrito funciona correctamente cuando no se aplican filtros. Si aplicas filtros, el carrito no permite añadir productos debido a un error de lógica en el código.
-- **Slider de productos**: Inicialmente funcionaba, pero actualmente no lo hace más. Solo el slider de "máximo" funciona, y el de "mínimo" está desactivado.
 
 ## Conclusión
 
-Este es un proyecto simple de E-Commerce desarrollado con Django y SQLite, donde puedes gestionar productos y usuarios. Aunque tiene algunos errores conocidos, las funciones principales de añadir, editar y eliminar productos y usuarios están implementadas.
+Este es un proyecto simple de E-Commerce desarrollado con Django y SQLite, donde puedes gestionar productos y usuarios. Aunque tiene un error conocido, las funciones principales de añadir, editar y eliminar productos y usuarios están implementadas.
 
 ¡Disfruta usando el proyecto! Si necesitas agregar más dispositivos, puedes hacerlo desde la interfaz o directamente en la base de datos.
 
