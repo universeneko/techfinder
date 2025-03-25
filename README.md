@@ -60,7 +60,7 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
 
     Haz `cd` al directorio raiz
 
-    En el directorio raiz del proyecto, donde están archivos cómo **"requiriments.txt"** ejecuta en la powershell los siguiente comandos:
+    En el directorio raiz del proyecto, donde están archivos cómo **"requiriments.txt"** ejecuta en la powershell los siguientes comandos:
 
 
 
@@ -127,6 +127,118 @@ Para crear un usuario con permisos elevados (administrador), sigue los siguiente
 Este es un proyecto simple de E-Commerce desarrollado con Django y SQLite, donde puedes gestionar productos y usuarios. Aunque tiene un error conocido, las funciones principales de añadir, editar y eliminar productos y usuarios están implementadas.
 
 ¡Disfruta usando el proyecto! Si necesitas agregar más dispositivos, puedes hacerlo desde la interfaz o directamente en la base de datos.
+
+---
+# TechFinder API - Uso con Bruno IDE
+
+## Requisitos Previos
+Para utilizar la API correctamente, es necesario contar con la última versión del proyecto. Se recomienda:
+- Descargar los archivos actualizados.
+- Eliminar la versión anterior o sobrescribir los archivos nuevos (instalación limpia).
+- Ejecutar los comandos necesarios desde el paso 1 hasta el último para habilitar el servidor.
+
+## Configuración de la API
+Una vez que el servidor esté en ejecución:
+- La API está configurada por defecto en `http://192.168.1.110`.
+- Si se ejecuta en otra IP, es necesario actualizar todas las URLs en los archivos de Bruno.
+- Se recomienda configurar la IP del host como estática para evitar cambios frecuentes.
+
+---
+
+## Instalación y Configuración de Bruno
+
+### 1. Descarga de Bruno
+Bruno puede descargarse desde su [sitio oficial](https://www.usebruno.com/downloads).
+- **Versión portable**: Ideal para pruebas rápidas.*
+- **Versión instalador**: Recomendado para uso permanente.
+
+*Se ha probado la versión portable con éxito.
+
+### 2. Importación de la Colección en Bruno
+1. Abrir Bruno y dirigirse a la pestaña **Collection**.
+2. Hacer clic en **Open Collection**.
+3. Navegar hasta el directorio `/api/techfinder` y seleccionarlo.
+4. Una vez importado, aparecerá un menú desplegable llamado **techfinder**, donde se encuentran todas las solicitudes disponibles.
+
+---
+
+## Autenticación y Uso de la API
+
+### 1. Generar un Token Bearer
+Para autenticar las solicitudes:
+1. Usar la petición **api_token_gen**.
+2. Se enviarán automáticamente los datos de usuario y contraseña preconfigurados.
+3. La API responderá con dos tokens.
+4. Copiar el valor del token **"access"** (el string largo entre comillas).
+
+⚠️ **Importante:** Este token es válido por **5 minutos**. Si expira, genera uno nuevo.
+
+### 2. Configurar el Token en las Peticiones
+Para incluir el token en las peticiones:
+- En la sección **Headers** de cada petición, agrega la propiedad:
+- En todas ya se encuentra agregada pero hace falta cambiar el token por el generado recien.
+  ```plaintext
+  Authorization: Bearer [API Token]
+  ```
+  (Reemplazar `[API Token]` con el valor copiado, sin comillas).
+
+---
+
+## Ejemplo de Edición de un Dispositivo
+Para modificar un dispositivo con la request **device_editor**, se pueden enviar solo los campos que se desean actualizar.
+
+### Ejemplo de Payload:
+```json
+{
+    "nombre": "Nuevo Nombre del Producto",
+    "descripcion": "Nueva Descripción",
+    "precio": 500.0,
+    "stock": 10,
+    "tipo": "Smartphone",
+    "sistema_operativo": "Android",
+    "imagen_url": "https://example.com/imagen.jpg"
+}
+```
+
+- Si solo se envía **"nombre"**, solo se actualizará ese campo sin afectar los demás.
+- La API es flexible y permite editar solo los campos necesarios.
+
+## Ejemplo de Subida de Imágenes en `device_adder`
+
+Al agregar un nuevo dispositivo a través de la API `device_adder`, se puede incluir una imagen del producto de dos formas:
+
+1. **Adjuntar la imagen en la petición** (como un archivo en formato `PNG` con proporción `1:1`).
+2. **Proporcionar una URL de la imagen**, permitiendo que el sistema la descargue automáticamente y la almacene en el directorio `media/products/`.
+
+### Requisitos de la imagen:
+- **Formato:** PNG  
+- **Relación de aspecto:** 1:1 (cuadrada)  
+- **Método de envío:** Archivo en la petición o URL válida  
+
+Si se proporciona una URL, el servidor gestionará la descarga y almacenamiento de la imagen en `media/products/`. Asegúrate de que la URL sea accesible y que la imagen cumpla con los requisitos de formato.  
+
+Ejemplo de JSON con URL de imagen:  
+
+```json
+{
+  "nombre": "iPhone 15",
+  "descripcion": "Última generación de Apple",
+  "precio": "1200.99",
+  "stock": 10,
+  "tipo": "smartphone",
+  "sistema_operativo": "iOS",
+  "imagen_url": "https://cablenet.com.cy/wp-content/uploads/iPhone_15_Pro_Max_White_Titanium_Hero_Alt_Screen__USEN.png"
+}
+```
+
+
+---
+
+## Conclusión
+Una vez configurado el token, es posible realizar todas las peticiones y visualizar las respuestas sin inconvenientes.
+
+¡Listo para interactuar con la API en Bruno!
+
 
 ---
 
