@@ -1,0 +1,26 @@
+meta {
+  name: user_creator
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://192.168.1.110:8000/register/
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "nombre": "Valentina Maria",
+    "apellidos": "Martinez",
+    "email": "valentinamaria@gmail.com",
+    "password": "superpassword",
+    "confirm_password": "superpassword",
+    "permisos": 1
+  }
+}

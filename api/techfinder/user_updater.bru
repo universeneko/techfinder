@@ -1,0 +1,27 @@
+meta {
+  name: user_updater
+  type: http
+  seq: 3
+}
+
+post {
+  url: 192.168.1.110:8000/profile/update/
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMjY1MjUzLCJpYXQiOjE3NDIyNjQ5NTMsImp0aSI6IjA2NTdkNzZiOGJjZTQxM2Q4ZjNlYWMwYjBjMTAwOTZiIiwidXNlcl9pZCI6IjY1NWE4ZDRlLTdlZGItNDg4Zi05YWJkLWNmYTQyOTNlMDgxYyJ9.w5HlxWHv0IL4YemU8yKVheBCuMAy8rTEUsuU2I_Ch78
+}
+
+body:json {
+  {
+    "id": "655a8d4e7edb488f9abdcfa4293e081c",
+    "nombre": "Camila Luisa",
+    "apellidos": "Contreras",
+    "email": "cami.contreras@gmail.com",
+    "current_password": "sivengahombre",
+    "new_password": "sivengamujer"
+  }
+}

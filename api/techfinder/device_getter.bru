@@ -1,0 +1,16 @@
+meta {
+  name: device_getter
+  type: http
+  seq: 7
+}
+
+get {
+  url: http://192.168.1.110:8000/api/devices/50/
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyODczNDg3LCJpYXQiOjE3NDI4NzMxODcsImp0aSI6IjQyNDBlMmYwNDU1YzQyZGZhNmZjYzk0ZjU2YWM3YzVjIiwidXNlcl9pZCI6Ijk1NjJjMGE3LTVjYzUtNGI2Yy04ZDllLWQyZjVmNTkxMWVjZCJ9.69u3b0lyDU9YAkkbcKSGCJdQlggQTE0zDnOPVOpuJ8E
+}

@@ -1,0 +1,28 @@
+meta {
+  name: device_adder
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://192.168.1.110:8000/api/admin/add_device/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyODcyNTA4LCJpYXQiOjE3NDI4NzIyMDgsImp0aSI6IjVlZDIwZDVjZDQ1MTRjMjVhODRjYmI1ZmNkNmExYTc1IiwidXNlcl9pZCI6Ijk1NjJjMGE3LTVjYzUtNGI2Yy04ZDllLWQyZjVmNTkxMWVjZCJ9.42UbRx71tUdpP6IgSwTgWHTZ6z0I6dKh14WNLluOUrM
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "nombre": "iPhone 15",
+    "descripcion": "Última generación de Apple",
+    "precio": "1200.99",
+    "stock": 10,
+    "tipo": "smartphone",
+    "sistema_operativo": "iOS",
+    "imagen_url": "https://cablenet.com.cy/wp-content/uploads/iPhone_15_Pro_Max_White_Titanium_Hero_Alt_Screen__USEN.png"
+  }
+}

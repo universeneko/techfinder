@@ -1,0 +1,23 @@
+meta {
+  name: user_deletor
+  type: http
+  seq: 5
+}
+
+delete {
+  url: 192.168.1.110:8000/profile/delete/
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMjY5ODQzLCJpYXQiOjE3NDIyNjk1NDMsImp0aSI6IjE1NTE2NDIyMWJmYzQyODNiYzVjZDIxYTA2NGE4Yjg5IiwidXNlcl9pZCI6Ijk3NjgzZjUwLTA5ZjgtNGZlYS1iM2QyLTM2NGE5MzJlNWRjZiJ9.sP8HdoSP5m0_YCc7WRezWVOJ2zSS95C3GQ6h5Zhwlyc
+}
+
+body:json {
+  {
+    "id": "97683f5009f84feab3d2364a932e5dcf"
+  }
+  
+}

@@ -1,14 +1,17 @@
+# Librerías estándar de Python
 import json
 import os
 from decimal import Decimal
+from tempfile import NamedTemporaryFile
 
+# Librerías de Django
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.core.files.base import ContentFile
+from django.core.files.base import ContentFile, File
 from django.core.files.storage import default_storage
 from django.db import transaction, OperationalError
 from django.db.models import Q
@@ -17,15 +20,22 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_http_methods
 from django.views.generic import View
 
-from techfinder.models import (
-    Carrito,
-    CarritoProducto,
-    Producto,
-    Usuario,
-)
+# Librerías de terceros
+import requests
+from pip._internal.utils import logging
+
+# Librerías de DRF (Django Rest Framework)
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+# Modelos de la aplicación
+from techfinder.models import Producto, Carrito, CarritoProducto, Usuario
+
 
 # Vista principal
 def home_view(request):
@@ -201,66 +211,99 @@ class LoginView(View):
         return redirect('account')
 
 
+# Configuración del logger
+logger = logging.getLogger(__name__)
+
+@method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(View):
     @staticmethod
     def get(request):
         if request.user.is_authenticated:
-            return redirect(reverse('account')) #home
+            logger.info("Usuario autenticado intentó acceder a la página de registro. Redirigiendo a /account/")
+            return redirect(reverse('account'))
+
+        logger.info("Mostrando formulario de registro.")
         return render(request, 'techfinder_website_v2/account/auth/register.html')
 
     @staticmethod
     def post(request):
-        # Obtener datos del formulario
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
-
-        # Validaciones
-        if not all([first_name, last_name, email, password, confirm_password]):
-            messages.error(request, 'Todos los campos son obligatorios.')
-            return redirect('account')
-
-        if password != confirm_password:
-            messages.error(request, 'Las contraseñas no coinciden.')
-            return redirect('account')
-
-        if Usuario.objects.filter(email=email).exists():
-            messages.error(request, 'El email ya está registrado.')
-            return redirect('account')
+        logger.info("Recibiendo solicitud de registro.")
 
         try:
-            from django.db import transaction
+            data = json.loads(request.body.decode('utf-8'))
+            logger.info(f"Datos recibidos: {data}")
+
+            # Obtener datos del formulario
+            nombre = data.get('nombre')
+            apellidos = data.get('apellidos')
+            email = data.get('email')
+            password = data.get('password')
+            confirm_password = data.get('confirm_password')
+            permisos =  data.get('permisos')
+
+            # Validamos que sea 0 o 1 (evita valores inválidos)
+            if permisos not in [0, 1]:
+                logger.warning(f"Valor de permisos inválido: {permisos}. Se asignará 0 por defecto.")
+                permisos = 0
+
+            logger.info(f"Valores extraídos: nombre={nombre}, apellidos={apellidos}, email={email}")
+
+            # Validaciones
+            if not all([nombre, apellidos, email, password, confirm_password]):
+                logger.warning("Fallo en la validación: campos vacíos.")
+                return JsonResponse({'error': 'Todos los campos son obligatorios.'}, status=400)
+
+            if password != confirm_password:
+                logger.warning("Fallo en la validación: las contraseñas no coinciden.")
+                return JsonResponse({'error': 'Las contraseñas no coinciden.'}, status=400)
+
+            if Usuario.objects.filter(email=email).exists():
+                logger.warning(f"Fallo en la validación: el email {email} ya está registrado.")
+                return JsonResponse({'error': 'El email ya está registrado.'}, status=400)
+
+            # Crear usuario en una transacción atómica
             with transaction.atomic():
-                # Crear usuario
+                logger.info("Creando nuevo usuario en la base de datos.")
+
                 user = Usuario.objects.create(
-                    nombre=first_name,
-                    apellidos=last_name,
+                    nombre=nombre,
+                    apellidos=apellidos,
                     email=email,
-                    password=make_password(password),
+                    password=make_password(password),  # Encriptar contraseña
                     fecha_registro=timezone.now(),
-                    permisos=0
+                    permisos=permisos
                 )
+
+                logger.info(f"Usuario {user.email} creado con éxito. ID: {user.id}")
 
                 # Crear carrito para el usuario
                 Carrito.objects.create(usuario=user)
+                logger.info(f"Carrito creado para el usuario {user.email}")
 
                 # Autenticar y hacer login
                 authenticated_user = authenticate(request, email=email, password=password)
                 if authenticated_user is None:
+                    logger.error("Error en la autenticación después del registro.")
                     raise ValueError("Error en la autenticación del usuario")
 
                 login(request, authenticated_user)
-                messages.success(request, '¡Cuenta creada exitosamente!')
-                return redirect(reverse('account')) #home
+                logger.info(f"Usuario {user.email} autenticado y logueado con éxito.")
+
+                return JsonResponse({'success': True, 'message': 'Cuenta creada exitosamente.'}, status=201)
+
+        except json.JSONDecodeError:
+            logger.error("Error en el formato JSON recibido.")
+            return JsonResponse({'error': 'Formato JSON inválido.'}, status=400)
 
         except Exception as e:
+            logger.error(f"Error inesperado al crear el usuario: {str(e)}", exc_info=True)
+
             # Si algo falla, eliminamos el usuario si se creó
             if 'user' in locals():
                 user.delete()
-            messages.error(request, 'Ocurrió un error al crear la cuenta. Por favor, inténtalo de nuevo.')
-            return redirect('account')
+                logger.warning(f"Usuario {user.email} eliminado debido a un error.")
+
+            return JsonResponse({'error': 'Ocurrió un error al crear la cuenta. Inténtalo de nuevo.'}, status=500)
 
 # Vista de cierre de sesión
 class LogoutView(View):
@@ -327,24 +370,31 @@ class AgregarCarritoView(View):
             messages.error(request, 'Error al agregar al carrito.')
             return redirect('store')
 
-@login_required
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])  # Solo usuarios autenticados pueden ver la lista
+def get_all_users(request):
+    usuarios = Usuario.objects.all().values('id', 'nombre', 'apellidos', 'email')
+    return Response({"usuarios": list(usuarios)}, status=200)
+@permission_classes([IsAuthenticated])
 def user_profile(request):
     return render(request, 'techfinder_website_v2/account/user.html')
 
-
-@login_required
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def update_user(request):
+    print("Solicitud recibida para actualizar usuario")
     if request.method == 'POST':
         user = request.user
 
         # Actualizar información básica
-        user.nombre = request.POST.get('nombre')
-        user.apellidos = request.POST.get('apellidos')
-        user.email = request.POST.get('email')
+        user.nombre = request.data.get('nombre')
+        user.apellidos = request.data.get('apellidos')
+        user.email = request.data.get('email')
 
         # Manejar cambio de contraseña
-        current_password = request.POST.get('current_password')
-        new_password = request.POST.get('new_password')
+        current_password = request.data.get('current_password')
+        new_password = request.data.get('new_password')
 
         if new_password:
             if not check_password(current_password, user.password):
@@ -359,20 +409,44 @@ def update_user(request):
     return redirect('home')
 
 
-@login_required
-def delete_account(request):
-    if request.method == 'POST':
+@method_decorator(csrf_exempt, name='dispatch')  # 🔥 Evita error CSRF
+@method_decorator(api_view(['POST', 'DELETE']), name='dispatch')  # Acepta POST y DELETE
+@method_decorator(permission_classes([IsAuthenticated]), name='dispatch')  # Requiere autenticación
+class DeleteAccountView(View):
+
+    @staticmethod
+    def post(request, *args, **kwargs):
+        """Elimina la cuenta del usuario autenticado (desde la plataforma web)."""
         try:
             request.user.delete()
-            messages.success(request, 'Cuenta eliminada correctamente')
-            return JsonResponse({
-                'success': True,
-                'message': 'Cuenta eliminada correctamente'
-            })
+            return JsonResponse({'success': True, 'message': 'Cuenta eliminada correctamente'}, status=200)
         except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)})
-    return JsonResponse({'success': False, 'error': 'Método no permitido'})
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
+    @staticmethod
+    def delete(request, *args, **kwargs):
+        """Elimina una cuenta por ID (desde la API)."""
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            user_id = data.get('id')
+
+            if not user_id:
+                return JsonResponse({'success': False, 'error': 'Se requiere un ID de usuario'}, status=400)
+
+            try:
+                user = Usuario.objects.get(id=user_id)
+            except Usuario.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Usuario no encontrado'}, status=404)
+
+            user.delete()
+            return JsonResponse({'success': True, 'message': 'Cuenta eliminada correctamente'}, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': 'JSON inválido'}, status=400)
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+# Admin View
 class AdminView(UserPassesTestMixin, View):
     template_name = 'techfinder_website_v2/admin/admin.html'
 
@@ -800,3 +874,253 @@ def get_cart_count(request):
 def get_cart_count_api(request):
     count = get_cart_count(request)  # La función que creamos antes
     return JsonResponse({'count': count})
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_device_api(request):
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+
+        # Obtener datos del JSON
+        nombre = data.get('nombre')
+        descripcion = data.get('descripcion')
+        precio = data.get('precio')
+        stock = data.get('stock')
+        tipo = data.get('tipo')
+        sistema_operativo = data.get('sistema_operativo')
+        imagen_url = data.get('imagen_url')
+
+        # Validar campos requeridos
+        if not all([nombre, precio, stock, tipo, sistema_operativo]):
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Todos los campos obligatorios deben estar presentes'
+            }, status=400)
+
+        # Preparar datos del producto
+        producto_data = {
+            'nombre': nombre,
+            'descripcion': descripcion,
+            'precio': Decimal(precio),
+            'stock': int(stock),
+            'tipo': tipo,
+            'sistema_operativo': sistema_operativo
+        }
+
+        # Si se proporciona una URL de imagen, la descargamos y la guardamos
+        if imagen_url:
+            # Descargar la imagen
+            response = requests.get(imagen_url)
+            if response.status_code == 200:
+                # Crear un archivo temporal en memoria
+                imagen_temp = NamedTemporaryFile(delete=True)
+                imagen_temp.write(response.content)
+                imagen_temp.flush()
+
+                # Crear el nombre de archivo
+                imagen_filename = os.path.basename(imagen_url)
+                # Guardar la imagen en el modelo de producto
+                producto_data['imagen'] = File(imagen_temp, name=imagen_filename)
+
+        # Crear el producto en la base de datos
+        producto = Producto.objects.create(**producto_data)
+
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Dispositivo añadido correctamente',
+            'id': producto.id
+        }, status=201)
+
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'El cuerpo de la solicitud debe ser un JSON válido'
+        }, status=400)
+    except ValueError as ve:
+        return JsonResponse({
+            'status': 'error',
+            'message': f'Error de validación: {str(ve)}'
+        }, status=400)
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': f'Error al procesar la solicitud: {str(e)}'
+        }, status=500)
+
+
+@csrf_exempt
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def edit_device_api(request, producto_id):
+    try:
+        # Verificar si el producto existe
+        try:
+            producto = Producto.objects.get(id=producto_id)
+        except Producto.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Producto no encontrado'
+            }, status=404)
+
+        # Cargar los datos del JSON
+        data = json.loads(request.body.decode('utf-8'))
+
+        # Extraer los datos que puedan ser editados
+        nombre = data.get('nombre')
+        descripcion = data.get('descripcion')
+        precio = data.get('precio')
+        stock = data.get('stock')
+        tipo = data.get('tipo')
+        sistema_operativo = data.get('sistema_operativo')
+        imagen_url = data.get('imagen_url')  # Opcional
+
+        # Editar solo los campos que están presentes en la solicitud
+        if nombre:
+            producto.nombre = nombre
+        if descripcion:
+            producto.descripcion = descripcion
+        if precio:
+            producto.precio = Decimal(precio)
+        if stock:
+            producto.stock = int(stock)
+        if tipo:
+            producto.tipo = tipo
+        if sistema_operativo:
+            producto.sistema_operativo = sistema_operativo
+        if imagen_url:
+            # Si hay una nueva URL de imagen, la descargamos y actualizamos
+            response = requests.get(imagen_url)
+            if response.status_code == 200:
+                # Guardar la nueva imagen
+                imagen_temp = NamedTemporaryFile(delete=True)
+                imagen_temp.write(response.content)
+                imagen_temp.flush()
+                imagen_filename = os.path.basename(imagen_url)
+                producto.imagen = File(imagen_temp, name=imagen_filename)
+
+        # Guardar los cambios en el producto
+        producto.save()
+
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Producto actualizado correctamente',
+            'id': producto.id
+        }, status=200)
+
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'El cuerpo de la solicitud debe ser un JSON válido'
+        }, status=400)
+    except ValueError as ve:
+        return JsonResponse({
+            'status': 'error',
+            'message': f'Error de validación: {str(ve)}'
+        }, status=400)
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': f'Error al procesar la solicitud: {str(e)}'
+        }, status=500)
+
+
+@csrf_exempt
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_device_api(request, producto_id):
+    try:
+        # Buscar el producto por ID
+        try:
+            producto = Producto.objects.get(id=producto_id)
+        except Producto.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Producto no encontrado'
+            }, status=404)
+
+        # Eliminar el producto
+        producto.delete()
+
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Producto eliminado correctamente',
+        }, status=200)
+
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': f'Error al procesar la solicitud: {str(e)}'
+        }, status=500)
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_all_devices(request):
+    try:
+        # Obtener todos los productos de la base de datos
+        productos = Producto.objects.all()
+
+        # Crear una lista con los productos en formato legible
+        productos_list = []
+        for producto in productos:
+            producto_data = {
+                'id': producto.id,
+                'nombre': producto.nombre,
+                'descripcion': producto.descripcion,
+                'precio': str(producto.precio),
+                'stock': producto.stock,
+                'tipo': producto.tipo,
+                'sistema_operativo': producto.sistema_operativo,
+                'imagen_url': producto.imagen.url if producto.imagen else 'No disponible',
+            }
+            productos_list.append(producto_data)
+
+        return Response({
+            'status': 'success',
+            'data': productos_list
+        }, status=200)
+
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': f'Error al obtener los productos: {str(e)}'
+        }, status=500)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_device_by_id(request, id):
+    try:
+        # Intentamos obtener el producto por ID
+        producto = Producto.objects.get(id=id)
+
+        # Crear el producto en formato legible
+        producto_data = {
+            'id': producto.id,
+            'nombre': producto.nombre,
+            'descripcion': producto.descripcion,
+            'precio': str(producto.precio),
+            'stock': producto.stock,
+            'tipo': producto.tipo,
+            'sistema_operativo': producto.sistema_operativo,
+            'imagen_url': producto.imagen.url if producto.imagen else 'No disponible',
+        }
+
+        return Response({
+            'status': 'success',
+            'data': producto_data
+        }, status=200)
+
+    except Producto.DoesNotExist:
+        return Response({
+            'status': 'error',
+            'message': 'Producto no encontrado'
+        }, status=404)
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': f'Error al obtener el producto: {str(e)}'
+        }, status=500)

@@ -43,7 +43,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'techfinder_website_v2',
     'techfinder',
+    'rest_framework',
+    'rest_framework_simplejwt',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        #'rest_framework.authentication.SessionAuthentication',  # Para autenticación normal
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Para tokens JWT
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -143,3 +155,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CSRF_TRUSTED_ORIGINS = ['http://192.168.1.110:8000']
+CSRF_COOKIE_SECURE = False  # Solo en desarrollo
+SESSION_COOKIE_SECURE = False  # Solo en desarrollo

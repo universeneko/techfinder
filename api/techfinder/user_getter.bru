@@ -1,0 +1,15 @@
+meta {
+  name: user_getter
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://192.168.1.110:8000/api/users/
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
